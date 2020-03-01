@@ -4,16 +4,11 @@
 #include <sgn/ConstantPool.hpp>
 #include <sgn/Function.hpp>
 #include <sgn/Instruction.hpp>
+#include <sgn/Operand.hpp>
 
 #include <cstdint>
 
 namespace sgn {
-	enum class IntConstantIndex : std::uint32_t {};
-	enum class LongConstantIndex : std::uint32_t {};
-	enum class DoubleConstantIndex : std::uint32_t {};
-
-	enum class FunctionIndex : std::uint32_t {};
-
 	class ByteFile final {
 	private:
 		ConstantPool m_ConstantPool;
@@ -42,6 +37,8 @@ namespace sgn {
 		FunctionIndex AddFunction(std::uint16_t arity);
 		FunctionIndex AddFunction(bool hasResult);
 		FunctionIndex AddFunction(std::uint16_t arity, bool hasResult);
+		const Instructions* GetInstructions(FunctionIndex index) const noexcept;
+		Instructions* GetInstructions(FunctionIndex index) noexcept;
 
 		const Instructions* GetEntryPoint() const noexcept;
 		Instructions* GetEntryPoint() noexcept;

@@ -3,7 +3,7 @@
 namespace sgn {
 	Instruction::Instruction(sgn::OpCode opCode) noexcept
 		: OpCode(opCode) {}
-	Instruction::Instruction(sgn::OpCode opCode, std::uint32_t operand) noexcept
+	Instruction::Instruction(sgn::OpCode opCode, sgn::Operand operand) noexcept
 		: OpCode(opCode), Operand(operand) {}
 	Instruction::Instruction(const Instruction& instruction) noexcept
 		: OpCode(instruction.OpCode), Operand(instruction.Operand) {}

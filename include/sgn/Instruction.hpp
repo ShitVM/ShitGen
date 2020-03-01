@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sgn/Operand.hpp>
+
 #include <cstdint>
 #include <vector>
 
@@ -67,12 +69,12 @@ namespace sgn {
 	class Instruction final {
 	public:
 		sgn::OpCode OpCode = sgn::OpCode::Nop;
-		std::uint32_t Operand = 0;
+		sgn::Operand Operand;
 
 	public:
 		Instruction() noexcept = default;
 		Instruction(sgn::OpCode opCode) noexcept;
-		Instruction(sgn::OpCode opCode, std::uint32_t operand) noexcept;
+		Instruction(sgn::OpCode opCode, sgn::Operand operand) noexcept;
 		Instruction(const Instruction& instruction) noexcept;
 		~Instruction() = default;
 
