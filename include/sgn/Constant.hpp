@@ -7,10 +7,10 @@
 namespace sgn {
 	class Constant {
 	private:
-		Type m_Type;
+		const Type* m_Type = nullptr;
 
 	public:
-		explicit Constant(Type type) noexcept;
+		explicit Constant(const Type* type) noexcept;
 		Constant(const Constant&) = delete;
 		virtual ~Constant() = 0;
 
@@ -20,7 +20,7 @@ namespace sgn {
 		bool operator!=(const Constant&) = delete;
 
 	public:
-		Type GetType() const noexcept;
+		const Type* GetType() const noexcept;
 	};
 
 	class IntConstant final : public Constant {

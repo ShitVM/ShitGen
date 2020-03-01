@@ -23,13 +23,13 @@ namespace sgn {
 		return m_IntPool.empty() && m_LongPool.empty() && m_DoublePool.empty();
 	}
 
-	void ConstantPool::Add(const IntConstant& intConstant) {
+	void ConstantPool::AddIntConstant(const IntConstant& intConstant) {
 		m_IntPool.push_back(intConstant);
 	}
-	void ConstantPool::Add(const LongConstant& longConstant) {
+	void ConstantPool::AddLongConstant(const LongConstant& longConstant) {
 		m_LongPool.push_back(longConstant);
 	}
-	void ConstantPool::Add(const DoubleConstant& doubleConstant) {
+	void ConstantPool::AddDoubleConstant(const DoubleConstant& doubleConstant) {
 		m_DoublePool.push_back(doubleConstant);
 	}
 

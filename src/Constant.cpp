@@ -1,11 +1,11 @@
 #include <sgn/Constant.hpp>
 
 namespace sgn {
-	Constant::Constant(Type type) noexcept
+	Constant::Constant(const Type* type) noexcept
 		: m_Type(type) {}
 	Constant::~Constant() {}
 
-	Type Constant::GetType() const noexcept {
+	const Type* Constant::GetType() const noexcept {
 		return m_Type;
 	}
 }

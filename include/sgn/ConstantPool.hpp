@@ -25,9 +25,9 @@ namespace sgn {
 		void Clear() noexcept;
 		bool IsEmpty() const noexcept;
 
-		void Add(const IntConstant& intConstant);
-		void Add(const LongConstant& longConstant);
-		void Add(const DoubleConstant& doubleConstant);
+		void AddIntConstant(const IntConstant& intConstant);
+		void AddLongConstant(const LongConstant& longConstant);
+		void AddDoubleConstant(const DoubleConstant& doubleConstant);
 
 		bool Contains(const IntConstant& intConstant) const noexcept;
 		bool Contains(const LongConstant& longConstant) const noexcept;
