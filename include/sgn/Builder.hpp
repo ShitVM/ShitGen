@@ -4,12 +4,16 @@
 #include <sgn/Instruction.hpp>
 #include <sgn/Operand.hpp>
 
+#include <string>
+#include <unordered_map>
+
 namespace sgn {
 	class Builder final {
 	private:
 		ByteFile* m_ByteFile = nullptr;
 		Instructions* m_Instructions = nullptr;
 		std::uint32_t m_LocalVariableIndex = 0;
+		std::unordered_map<std::string, LabelIndex> m_ReservedLabels;
 
 	public:
 		Builder(ByteFile& file, FunctionIndex index);
@@ -27,6 +31,9 @@ namespace sgn {
 		ByteFile& GetByteFile() noexcept;
 
 		LocalVariableIndex AddLocalVariable();
+		LabelIndex AddLabel();
+		LabelIndex AddLabel(const std::string& reserved);
+		LabelIndex ReserveLabel(const std::string& reserve);
 
 		void Nop();
 

@@ -57,10 +57,20 @@ namespace sgn {
 		}
 	}
 
+	std::uint32_t Instructions::GetLabelCount() const noexcept {
+		return static_cast<std::uint32_t>(m_Labels.size());
+	}
+	std::uint64_t Instructions::GetInstructionCount() const noexcept {
+		return m_Instructions.size();
+	}
+
 	void Instructions::AddLabel(std::uint64_t offset) {
 		m_Labels.push_back(offset);
 	}
 	void Instructions::AddInstruction(const Instruction& instruction) {
 		m_Instructions.push_back(instruction);
+	}
+	void Instructions::SetLabel(std::uint32_t index, std::uint64_t offset) noexcept {
+		m_Labels[index] = offset;
 	}
 }

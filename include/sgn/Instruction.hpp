@@ -105,7 +105,11 @@ namespace sgn {
 	public:
 		void Save(std::ofstream& stream) const;
 
+		std::uint32_t GetLabelCount() const noexcept;
+		std::uint64_t GetInstructionCount() const noexcept;
+
 		void AddLabel(std::uint64_t offset);
 		void AddInstruction(const Instruction& instruction);
+		void SetLabel(std::uint32_t index, std::uint64_t offset) noexcept;
 	};
 }
