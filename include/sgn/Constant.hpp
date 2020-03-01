@@ -36,8 +36,8 @@ namespace sgn {
 	public:
 		IntConstant& operator=(std::uint32_t value) noexcept;
 		IntConstant& operator=(const IntConstant& constant) noexcept;
-		bool operator==(const IntConstant&) = delete;
-		bool operator!=(const IntConstant&) = delete;
+		bool operator==(const IntConstant& constant) const noexcept;
+		bool operator!=(const IntConstant& constant) const noexcept;
 	};
 
 	class LongConstant final : public Constant {
@@ -53,8 +53,8 @@ namespace sgn {
 	public:
 		LongConstant& operator=(std::uint64_t value) noexcept;
 		LongConstant& operator=(const LongConstant& constant) noexcept;
-		bool operator==(const LongConstant&) = delete;
-		bool operator!=(const LongConstant&) = delete;
+		bool operator==(const LongConstant& constant) const noexcept;
+		bool operator!=(const LongConstant& constant) const noexcept;
 	};
 
 	class DoubleConstant final : public Constant {
@@ -70,7 +70,7 @@ namespace sgn {
 	public:
 		DoubleConstant& operator=(double value) noexcept;
 		DoubleConstant& operator=(const DoubleConstant& constant) noexcept;
-		bool operator==(const DoubleConstant&) = delete;
-		bool operator!=(const DoubleConstant&) = delete;
+		bool operator==(const DoubleConstant& constant) const noexcept;
+		bool operator!=(const DoubleConstant& constant) const noexcept;
 	};
 }

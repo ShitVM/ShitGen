@@ -26,6 +26,12 @@ namespace sgn {
 		Value = constant.Value;
 		return *this;
 	}
+	bool IntConstant::operator==(const IntConstant& constant) const noexcept {
+		return Value == constant.Value;
+	}
+	bool IntConstant::operator!=(const IntConstant& constant) const noexcept {
+		return Value != constant.Value;
+	}
 }
 
 namespace sgn {
@@ -44,6 +50,12 @@ namespace sgn {
 		Value = constant.Value;
 		return *this;
 	}
+	bool LongConstant::operator==(const LongConstant& constant) const noexcept {
+		return Value == constant.Value;
+	}
+	bool LongConstant::operator!=(const LongConstant& constant) const noexcept {
+		return Value != constant.Value;
+	}
 }
 
 namespace sgn {
@@ -61,5 +73,11 @@ namespace sgn {
 	DoubleConstant& DoubleConstant::operator=(const DoubleConstant& constant) noexcept {
 		Value = constant.Value;
 		return *this;
+	}
+	bool DoubleConstant::operator==(const DoubleConstant& constant) const noexcept {
+		return Value == constant.Value;
+	}
+	bool DoubleConstant::operator!=(const DoubleConstant& constant) const noexcept {
+		return Value != constant.Value;
 	}
 }
