@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <ostream>
 
 namespace sgn {
 	enum class Endian {
@@ -27,5 +28,15 @@ namespace sgn {
 		temp = *reinterpret_cast<const transformer*>(&value);
 		std::reverse(temp.Bytes, temp.Bytes + sizeof(value));
 		return *reinterpret_cast<T*>(&temp);
+	}
+
+	template<typename T>
+	void WriteConstant(std::ostream& stream, T value) {
+		if constexpr (sizeof(value) > 1) {
+			if (GetEndian() != Endian::Little) {
+				value = ReverseEndian(value);
+			}
+		}
+		stream.write(reinterpret_cast<const char*>(&value), sizeof(value));
 	}
 }

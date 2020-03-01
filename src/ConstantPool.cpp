@@ -1,5 +1,7 @@
 #include <sgn/ConstantPool.hpp>
 
+#include <sgn/Memory.hpp>
+
 #include <algorithm>
 #include <utility>
 
@@ -21,6 +23,23 @@ namespace sgn {
 	}
 	bool ConstantPool::IsEmpty() const noexcept {
 		return m_IntPool.empty() && m_LongPool.empty() && m_DoublePool.empty();
+	}
+
+	void ConstantPool::Save(std::ofstream& stream) const {
+		WriteConstant(stream, static_cast<std::uint32_t>(m_IntPool.size()));
+		for (std::uint32_t i = 0; i < m_IntPool.size(); ++i) {
+			WriteConstant(stream, m_IntPool[i].Value);
+		}
+
+		WriteConstant(stream, static_cast<std::uint32_t>(m_LongPool.size()));
+		for (std::uint32_t i = 0; i < m_LongPool.size(); ++i) {
+			WriteConstant(stream, m_LongPool[i].Value);
+		}
+
+		WriteConstant(stream, static_cast<std::uint32_t>(m_DoublePool.size()));
+		for (std::uint32_t i = 0; i < m_DoublePool.size(); ++i) {
+			WriteConstant(stream, m_DoublePool[i].Value);
+		}
 	}
 
 	std::uint32_t ConstantPool::AddIntConstant(const IntConstant& intConstant) {
@@ -50,5 +69,34 @@ namespace sgn {
 		const auto iter = std::find(m_DoublePool.begin(), m_DoublePool.end(), doubleConstant);
 		if (iter == m_DoublePool.end()) return 0;
 		else return std::distance(m_DoublePool.begin(), iter) + 1;
+	}
+
+	std::uint32_t ConstantPool::TransformRealIndex(IntConstantIndex index) const noexcept {
+		return static_cast<std::uint32_t>(index) + GetIntConstantOffset();
+	}
+	std::uint32_t ConstantPool::TransformRealIndex(LongConstantIndex index) const noexcept {
+		return static_cast<std::uint32_t>(index) + GetLongConstantOffset();
+	}
+	std::uint32_t ConstantPool::TransformRealIndex(DoubleConstantIndex index) const noexcept {
+		return static_cast<std::uint32_t>(index) + GetDoubleConstantOffset();
+	}
+
+	std::uint32_t ConstantPool::GetIntConstantOffset() const noexcept {
+		return 0;
+	}
+	std::uint32_t ConstantPool::GetLongConstantOffset() const noexcept {
+		return GetIntConstantOffset() + GetIntConstantCount();
+	}
+	std::uint32_t ConstantPool::GetDoubleConstantOffset() const noexcept {
+		return GetLongConstantOffset() + GetLongConstantCount();
+	}
+	std::uint32_t ConstantPool::GetIntConstantCount() const noexcept {
+		return static_cast<std::uint32_t>(m_IntPool.size());
+	}
+	std::uint32_t ConstantPool::GetLongConstantCount() const noexcept {
+		return static_cast<std::uint32_t>(m_LongPool.size());
+	}
+	std::uint32_t ConstantPool::GetDoubleConstantCount() const noexcept {
+		return static_cast<std::uint32_t>(m_DoublePool.size());
 	}
 }

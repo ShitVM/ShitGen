@@ -7,6 +7,7 @@
 #include <sgn/Operand.hpp>
 
 #include <cstdint>
+#include <string>
 
 namespace sgn {
 	class ByteFile final {
@@ -42,5 +43,7 @@ namespace sgn {
 
 		const Instructions* GetEntryPoint() const noexcept;
 		Instructions* GetEntryPoint() noexcept;
+
+		void Save(const std::string& path) const;
 	};
 }

@@ -3,10 +3,11 @@
 #include <sgn/Operand.hpp>
 
 #include <cstdint>
+#include <fstream>
 #include <vector>
 
 namespace sgn {
-	enum class OpCode {
+	enum class OpCode : std::uint8_t {
 		Nop,
 
 		Push,
@@ -102,6 +103,8 @@ namespace sgn {
 		bool operator!=(const Instructions&) = delete;
 
 	public:
+		void Save(std::ofstream& stream) const;
+
 		void AddLabel(std::uint64_t offset);
 		void AddInstruction(const Instruction& instruction);
 	};

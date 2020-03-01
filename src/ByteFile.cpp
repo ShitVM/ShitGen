@@ -1,5 +1,11 @@
 #include <sgn/ByteFile.hpp>
 
+#include <sgn/Memory.hpp>
+
+#include <fstream>
+#include <stdexcept>
+#include <utility>
+
 namespace sgn {
 	ByteFile::ByteFile(ByteFile&& file) noexcept
 		: m_ConstantPool(std::move(file.m_ConstantPool)), m_Functions(std::move(file.m_Functions)), m_EntryPoint(std::move(file.m_EntryPoint)) {}
@@ -68,5 +74,29 @@ namespace sgn {
 	}
 	Instructions* ByteFile::GetEntryPoint() noexcept {
 		return &m_EntryPoint;
+	}
+
+	void ByteFile::Save(const std::string& path) const {
+		std::ofstream stream(path, std::ofstream::binary);
+		if (!stream) throw std::runtime_error("Failed to open the file.");
+
+		// Header
+		static constexpr std::uint8_t magicNumber[] = { 0x74, 0x68, 0x74, 0x68 };
+		static constexpr std::uint32_t version = 0x00000000;
+
+		stream.write(reinterpret_cast<const char*>(magicNumber), sizeof(magicNumber));
+		WriteConstant(stream, version);
+
+		// Constant Pool
+		m_ConstantPool.Save(stream);
+
+		// Functions
+		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));
+		for (std::uint32_t i = 0; i < m_Functions.size(); ++i) {
+			m_Functions[i].Save(stream);
+		}
+
+		// Entry Point
+		m_EntryPoint.Save(stream);
 	}
 }

@@ -3,6 +3,7 @@
 #include <sgn/Instruction.hpp>
 
 #include <cstdint>
+#include <fstream>
 #include <vector>
 
 namespace sgn {
@@ -21,6 +22,9 @@ namespace sgn {
 		Function& operator=(Function&& function) noexcept;
 		bool operator==(const Function&) = delete;
 		bool operator!=(const Function&) = delete;
+
+	public:
+		void Save(std::ofstream& stream) const;
 	};
 
 	using Functions = std::vector<Function>;
