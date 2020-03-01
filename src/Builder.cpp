@@ -5,7 +5,8 @@
 namespace sgn {
 	Builder::Builder(ByteFile& file, FunctionIndex index)
 		: m_ByteFile(&file) {
-		m_Instructions = file.GetInstructions(index);
+		m_Instructions = &file.GetFunction(index)->Instructions;
+		m_LocalVariableIndex += file.GetFunction(index)->Arity;
 	}
 	Builder::Builder(ByteFile& file, Instructions* instructions)
 		: m_ByteFile(&file), m_Instructions(instructions) {}
@@ -27,6 +28,9 @@ namespace sgn {
 		return *m_ByteFile;
 	}
 
+	LocalVariableIndex Builder::GetArgument(std::uint32_t index) {
+		return static_cast<LocalVariableIndex>(index);
+	}
 	LocalVariableIndex Builder::AddLocalVariable() {
 		return static_cast<LocalVariableIndex>(m_LocalVariableIndex++);
 	}

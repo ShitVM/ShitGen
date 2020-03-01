@@ -62,11 +62,11 @@ namespace sgn {
 		m_Functions.back().HasResult = hasResult;
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
-	const Instructions* ByteFile::GetInstructions(FunctionIndex index) const noexcept {
-		return &m_Functions[static_cast<std::size_t>(index)].Instructions;
+	const Function* ByteFile::GetFunction(FunctionIndex index) const noexcept {
+		return &m_Functions[static_cast<std::size_t>(index)];
 	}
-	Instructions* ByteFile::GetInstructions(FunctionIndex index) noexcept {
-		return &m_Functions[static_cast<std::size_t>(index)].Instructions;
+	Function* ByteFile::GetFunction(FunctionIndex index) noexcept {
+		return &m_Functions[static_cast<std::size_t>(index)];
 	}
 
 	const Instructions* ByteFile::GetEntryPoint() const noexcept {

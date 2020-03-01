@@ -38,8 +38,8 @@ namespace sgn {
 		FunctionIndex AddFunction(std::uint16_t arity);
 		FunctionIndex AddFunction(bool hasResult);
 		FunctionIndex AddFunction(std::uint16_t arity, bool hasResult);
-		const Instructions* GetInstructions(FunctionIndex index) const noexcept;
-		Instructions* GetInstructions(FunctionIndex index) noexcept;
+		const Function* GetFunction(FunctionIndex index) const noexcept;
+		Function* GetFunction(FunctionIndex index) noexcept;
 
 		const Instructions* GetEntryPoint() const noexcept;
 		Instructions* GetEntryPoint() noexcept;

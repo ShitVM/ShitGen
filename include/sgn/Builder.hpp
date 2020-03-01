@@ -30,6 +30,7 @@ namespace sgn {
 		const ByteFile& GetByteFile() const noexcept;
 		ByteFile& GetByteFile() noexcept;
 
+		LocalVariableIndex GetArgument(std::uint32_t index);
 		LocalVariableIndex AddLocalVariable();
 		LabelIndex AddLabel();
 		LabelIndex AddLabel(const std::string& reserved);
