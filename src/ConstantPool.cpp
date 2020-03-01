@@ -58,17 +58,17 @@ namespace sgn {
 	std::uint32_t ConstantPool::ContainsIntConstant(const IntConstant& intConstant) const noexcept {
 		const auto iter = std::find(m_IntPool.begin(), m_IntPool.end(), intConstant);
 		if (iter == m_IntPool.end()) return 0;
-		else return std::distance(m_IntPool.begin(), iter) + 1;
+		else return static_cast<std::uint32_t>(std::distance(m_IntPool.begin(), iter) + 1);
 	}
 	std::uint32_t ConstantPool::ContainsLongConstant(const LongConstant& longConstant) const noexcept {
 		const auto iter = std::find(m_LongPool.begin(), m_LongPool.end(), longConstant);
 		if (iter == m_LongPool.end()) return 0;
-		else return std::distance(m_LongPool.begin(), iter) + 1;
+		else return static_cast<std::uint32_t>(std::distance(m_LongPool.begin(), iter) + 1);
 	}
 	std::uint32_t ConstantPool::ContainsDoubleConstant(const DoubleConstant& doubleConstant) const noexcept {
 		const auto iter = std::find(m_DoublePool.begin(), m_DoublePool.end(), doubleConstant);
 		if (iter == m_DoublePool.end()) return 0;
-		else return std::distance(m_DoublePool.begin(), iter) + 1;
+		else return static_cast<std::uint32_t>(std::distance(m_DoublePool.begin(), iter) + 1);
 	}
 
 	std::uint32_t ConstantPool::TransformRealIndex(IntConstantIndex index) const noexcept {
