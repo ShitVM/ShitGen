@@ -3,6 +3,7 @@
 #include <sgn/Instruction.hpp>
 
 #include <cstdint>
+#include <vector>
 
 namespace sgn {
 	class Function final {
@@ -21,4 +22,6 @@ namespace sgn {
 		bool operator==(const Function&) = delete;
 		bool operator!=(const Function&) = delete;
 	};
+
+	using Functions = std::vector<Function>;
 }

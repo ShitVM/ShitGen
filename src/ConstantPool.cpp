@@ -23,23 +23,32 @@ namespace sgn {
 		return m_IntPool.empty() && m_LongPool.empty() && m_DoublePool.empty();
 	}
 
-	void ConstantPool::AddIntConstant(const IntConstant& intConstant) {
+	std::uint32_t ConstantPool::AddIntConstant(const IntConstant& intConstant) {
 		m_IntPool.push_back(intConstant);
+		return static_cast<std::uint32_t>(m_IntPool.size() - 1);
 	}
-	void ConstantPool::AddLongConstant(const LongConstant& longConstant) {
+	std::uint32_t ConstantPool::AddLongConstant(const LongConstant& longConstant) {
 		m_LongPool.push_back(longConstant);
+		return static_cast<std::uint32_t>(m_LongPool.size() - 1);
 	}
-	void ConstantPool::AddDoubleConstant(const DoubleConstant& doubleConstant) {
+	std::uint32_t ConstantPool::AddDoubleConstant(const DoubleConstant& doubleConstant) {
 		m_DoublePool.push_back(doubleConstant);
+		return static_cast<std::uint32_t>(m_DoublePool.size() - 1);
 	}
 
-	bool ConstantPool::Contains(const IntConstant& intConstant) const noexcept {
-		return std::find(m_IntPool.begin(), m_IntPool.end(), intConstant) != m_IntPool.end();
+	std::uint32_t ConstantPool::ContainsIntConstant(const IntConstant& intConstant) const noexcept {
+		const auto iter = std::find(m_IntPool.begin(), m_IntPool.end(), intConstant);
+		if (iter == m_IntPool.end()) return 0;
+		else return std::distance(m_IntPool.begin(), iter) + 1;
 	}
-	bool ConstantPool::Contains(const LongConstant& longConstant) const noexcept {
-		return std::find(m_LongPool.begin(), m_LongPool.end(), longConstant) != m_LongPool.end();
+	std::uint32_t ConstantPool::ContainsLongConstant(const LongConstant& longConstant) const noexcept {
+		const auto iter = std::find(m_LongPool.begin(), m_LongPool.end(), longConstant);
+		if (iter == m_LongPool.end()) return 0;
+		else return std::distance(m_LongPool.begin(), iter) + 1;
 	}
-	bool ConstantPool::Contains(const DoubleConstant& doubleConstant) const noexcept {
-		return std::find(m_DoublePool.begin(), m_DoublePool.end(), doubleConstant) != m_DoublePool.end();
+	std::uint32_t ConstantPool::ContainsDoubleConstant(const DoubleConstant& doubleConstant) const noexcept {
+		const auto iter = std::find(m_DoublePool.begin(), m_DoublePool.end(), doubleConstant);
+		if (iter == m_DoublePool.end()) return 0;
+		else return std::distance(m_DoublePool.begin(), iter) + 1;
 	}
 }

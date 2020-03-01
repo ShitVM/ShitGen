@@ -2,6 +2,7 @@
 
 #include <sgn/Constant.hpp>
 
+#include <cstdint>
 #include <vector>
 
 namespace sgn {
@@ -25,12 +26,12 @@ namespace sgn {
 		void Clear() noexcept;
 		bool IsEmpty() const noexcept;
 
-		void AddIntConstant(const IntConstant& intConstant);
-		void AddLongConstant(const LongConstant& longConstant);
-		void AddDoubleConstant(const DoubleConstant& doubleConstant);
+		std::uint32_t AddIntConstant(const IntConstant& intConstant);
+		std::uint32_t AddLongConstant(const LongConstant& longConstant);
+		std::uint32_t AddDoubleConstant(const DoubleConstant& doubleConstant);
 
-		bool Contains(const IntConstant& intConstant) const noexcept;
-		bool Contains(const LongConstant& longConstant) const noexcept;
-		bool Contains(const DoubleConstant& doubleConstant) const noexcept;
+		std::uint32_t ContainsIntConstant(const IntConstant& intConstant) const noexcept;
+		std::uint32_t ContainsLongConstant(const LongConstant& longConstant) const noexcept;
+		std::uint32_t ContainsDoubleConstant(const DoubleConstant& doubleConstant) const noexcept;
 	};
 }
