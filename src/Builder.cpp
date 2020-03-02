@@ -104,10 +104,7 @@ void Builder:: opCode(indexType index) {									\
 	InstructionWithOperandImpl(Call, FunctionIndex);
 	InstructionImpl(Ret);
 
-	InstructionImpl(I2L);
-	InstructionImpl(I2D);
-	InstructionImpl(L2I);
-	InstructionImpl(L2D);
-	InstructionImpl(D2I);
-	InstructionImpl(D2L);
+	InstructionImpl(ToI);
+	InstructionImpl(ToL);
+	InstructionImpl(ToD);
 }

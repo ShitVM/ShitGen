@@ -78,11 +78,8 @@ namespace sgn {
 		void Call(FunctionIndex index);
 		void Ret();
 
-		void I2L();
-		void I2D();
-		void L2I();
-		void L2D();
-		void D2I();
-		void D2L();
+		void ToI();
+		void ToL();
+		void ToD();
 	};
 }
