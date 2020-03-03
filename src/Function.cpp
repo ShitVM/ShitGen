@@ -15,9 +15,9 @@ namespace sgn {
 		return *this;
 	}
 
-	void Function::Save(std::ofstream& stream) const {
+	void Function::Save(std::ofstream& stream, ByteFileVersion, ByteCodeVersion bcVersion) const {
 		WriteConstant(stream, Arity);
 		WriteConstant(stream, HasResult);
-		Instructions.Save(stream);
+		Instructions.Save(stream, bcVersion);
 	}
 }

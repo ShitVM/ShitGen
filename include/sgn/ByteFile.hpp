@@ -5,6 +5,7 @@
 #include <sgn/Function.hpp>
 #include <sgn/Instruction.hpp>
 #include <sgn/Operand.hpp>
+#include <sgn/Version.hpp>
 
 #include <cstdint>
 #include <string>
@@ -15,6 +16,11 @@ namespace sgn {
 		ConstantPool m_ConstantPool;
 		Functions m_Functions;
 		Instructions m_EntryPoint;
+
+		ByteFileVersion m_ByteFileVersion = ByteFileVersion::Latest;
+		ByteCodeVersion m_ByteCodeVersion = ByteCodeVersion::Latest;
+
+		bool m_HasBuilder = false;
 
 	public:
 		ByteFile() noexcept = default;
@@ -27,6 +33,13 @@ namespace sgn {
 		bool operator!=(const ByteFile&) = delete;
 
 	public:
+		ByteFileVersion GetByteFileVersion() const noexcept;
+		void SetByteFileVersion(ByteFileVersion newVersion) noexcept;
+		ByteCodeVersion GetByteCodeVersion() const noexcept;
+		bool SetByteCodeVersion(ByteCodeVersion newVersion) noexcept;
+
+		void CreatedBuilder() noexcept;
+
 		IntConstantIndex AddIntConstant(std::uint32_t value);
 		LongConstantIndex AddLongConstant(std::uint64_t value);
 		DoubleConstantIndex AddDoubleConstant(double value);

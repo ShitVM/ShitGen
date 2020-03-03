@@ -2,6 +2,7 @@
 
 #include <sgn/Constant.hpp>
 #include <sgn/Operand.hpp>
+#include <sgn/Version.hpp>
 
 #include <cstdint>
 #include <fstream>
@@ -28,7 +29,7 @@ namespace sgn {
 		void Clear() noexcept;
 		bool IsEmpty() const noexcept;
 
-		void Save(std::ofstream& stream) const;
+		void Save(std::ofstream& stream, ByteFileVersion bfVersion) const;
 
 		std::uint32_t AddIntConstant(const IntConstant& intConstant);
 		std::uint32_t AddLongConstant(const LongConstant& longConstant);

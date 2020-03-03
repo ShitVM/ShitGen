@@ -35,7 +35,7 @@ namespace sgn {
 		return *this;
 	}
 
-	void Instructions::Save(std::ofstream& stream) const {
+	void Instructions::Save(std::ofstream& stream, ByteCodeVersion bcVersion) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Labels.size()));
 		for (std::uint32_t i = 0; i < m_Labels.size(); ++i) {
 			WriteConstant(stream, m_Labels[i]);
@@ -44,7 +44,7 @@ namespace sgn {
 		WriteConstant(stream, static_cast<std::uint64_t>(m_Instructions.size()));
 		for (std::uint64_t i = 0; i < m_Instructions.size(); ++i) {
 			const Instruction& inst = m_Instructions[static_cast<std::size_t>(i)];
-			WriteConstant(stream, inst.OpCode);
+			WriteConstant(stream, TransformOpCode(inst.OpCode, bcVersion));
 
 			switch (inst.Operand.index()) {
 			case 1: WriteConstant(stream, std::get<IntConstantIndex>(inst.Operand)); break;
@@ -72,5 +72,17 @@ namespace sgn {
 	}
 	void Instructions::SetLabel(std::uint32_t index, std::uint64_t offset) noexcept {
 		m_Labels[index] = offset;
+	}
+
+	OpCode Instructions::TransformOpCode(OpCode opCode, ByteCodeVersion bcVersion) const {
+		if (bcVersion >= ByteCodeVersion::v0_2_0) {
+			return opCode;
+		}
+
+		if (opCode >= OpCode::Add) {
+			opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 5);
+		}
+
+		return opCode;
 	}
 }

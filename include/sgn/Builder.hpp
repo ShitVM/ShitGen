@@ -44,6 +44,11 @@ namespace sgn {
 		void Pop();
 		void Load(LocalVariableIndex index);
 		void Store(LocalVariableIndex index);
+		void Lea(LocalVariableIndex index);
+		void TLoad();
+		void TStore();
+		void Copy();
+		void Swap();
 
 		void Add();
 		void Sub();
@@ -81,5 +86,6 @@ namespace sgn {
 		void ToI();
 		void ToL();
 		void ToD();
+		void ToP();
 	};
 }

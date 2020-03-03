@@ -8,13 +8,47 @@
 
 namespace sgn {
 	ByteFile::ByteFile(ByteFile&& file) noexcept
-		: m_ConstantPool(std::move(file.m_ConstantPool)), m_Functions(std::move(file.m_Functions)), m_EntryPoint(std::move(file.m_EntryPoint)) {}
+		: m_ConstantPool(std::move(file.m_ConstantPool)), m_Functions(std::move(file.m_Functions)), m_EntryPoint(std::move(file.m_EntryPoint)),
+		m_ByteFileVersion(file.m_ByteFileVersion), m_ByteCodeVersion(file.m_ByteCodeVersion), m_HasBuilder(file.m_HasBuilder) {
+		file.m_ByteFileVersion = ByteFileVersion::Latest;
+		file.m_ByteCodeVersion = ByteCodeVersion::Latest;
+
+		file.m_HasBuilder = false;
+	}
 
 	ByteFile& ByteFile::operator=(ByteFile&& file) noexcept {
 		m_ConstantPool = std::move(file.m_ConstantPool);
 		m_Functions = std::move(file.m_Functions);
 		m_EntryPoint = std::move(file.m_EntryPoint);
+
+		m_ByteFileVersion = file.m_ByteFileVersion;
+		m_ByteCodeVersion = file.m_ByteCodeVersion;
+
+		file.m_ByteFileVersion = ByteFileVersion::Latest;
+		file.m_ByteCodeVersion = ByteCodeVersion::Latest;
+
+		file.m_HasBuilder = false;
 		return *this;
+	}
+
+	ByteFileVersion ByteFile::GetByteFileVersion() const noexcept {
+		return m_ByteFileVersion;
+	}
+	void ByteFile::SetByteFileVersion(ByteFileVersion newVersion) noexcept {
+		m_ByteFileVersion = newVersion;
+	}
+	ByteCodeVersion ByteFile::GetByteCodeVersion() const noexcept {
+		return m_ByteCodeVersion;
+	}
+	bool ByteFile::SetByteCodeVersion(ByteCodeVersion newVersion) noexcept {
+		if (m_HasBuilder) return false;
+
+		m_ByteCodeVersion = newVersion;
+		return true;
+	}
+
+	void ByteFile::CreatedBuilder() noexcept {
+		m_HasBuilder = true;
 	}
 
 	IntConstantIndex ByteFile::AddIntConstant(std::uint32_t value) {
@@ -82,21 +116,21 @@ namespace sgn {
 
 		// Header
 		static constexpr std::uint8_t magicNumber[] = { 0x74, 0x68, 0x74, 0x68 };
-		static constexpr std::uint32_t version = 0x00000000;
 
 		stream.write(reinterpret_cast<const char*>(magicNumber), sizeof(magicNumber));
-		WriteConstant(stream, version);
+		WriteConstant(stream, m_ByteFileVersion);
+		WriteConstant(stream, m_ByteCodeVersion);
 
 		// Constant Pool
-		m_ConstantPool.Save(stream);
+		m_ConstantPool.Save(stream, m_ByteFileVersion);
 
 		// Functions
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));
 		for (std::uint32_t i = 0; i < m_Functions.size(); ++i) {
-			m_Functions[i].Save(stream);
+			m_Functions[i].Save(stream, m_ByteFileVersion, m_ByteCodeVersion);
 		}
 
 		// Entry Point
-		m_EntryPoint.Save(stream);
+		m_EntryPoint.Save(stream, m_ByteCodeVersion);
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sgn/Instruction.hpp>
+#include <sgn/Version.hpp>
 
 #include <cstdint>
 #include <fstream>
@@ -24,7 +25,7 @@ namespace sgn {
 		bool operator!=(const Function&) = delete;
 
 	public:
-		void Save(std::ofstream& stream) const;
+		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion) const;
 	};
 
 	using Functions = std::vector<Function>;

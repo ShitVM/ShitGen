@@ -25,7 +25,7 @@ namespace sgn {
 		return m_IntPool.empty() && m_LongPool.empty() && m_DoublePool.empty();
 	}
 
-	void ConstantPool::Save(std::ofstream& stream) const {
+	void ConstantPool::Save(std::ofstream& stream, ByteFileVersion) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(m_IntPool.size()));
 		for (std::uint32_t i = 0; i < m_IntPool.size(); ++i) {
 			WriteConstant(stream, m_IntPool[i].Value);
