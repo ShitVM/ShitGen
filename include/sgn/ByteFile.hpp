@@ -25,7 +25,7 @@ namespace sgn {
 	public:
 		ByteFile() noexcept = default;
 		ByteFile(ByteFile&& file) noexcept;
-		~ByteFile() = default;
+		~ByteFile();
 
 	public:
 		ByteFile& operator=(ByteFile&& file) noexcept;

@@ -16,6 +16,9 @@ namespace sgn {
 
 	public:
 		Function() noexcept = default;
+		explicit Function(std::uint16_t arity) noexcept;
+		explicit Function(bool hasResult) noexcept;
+		Function(std::uint16_t arity, bool hasResult) noexcept;
 		Function(Function&& function) noexcept;
 		~Function() = default;
 
@@ -28,5 +31,5 @@ namespace sgn {
 		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion) const;
 	};
 
-	using Functions = std::vector<Function>;
+	using Functions = std::vector<Function*>;
 }

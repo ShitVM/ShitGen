@@ -15,6 +15,11 @@ namespace sgn {
 
 		file.m_HasBuilder = false;
 	}
+	ByteFile::~ByteFile() {
+		for (const auto& func : m_Functions) {
+			delete func;
+		}
+	}
 
 	ByteFile& ByteFile::operator=(ByteFile&& file) noexcept {
 		m_ConstantPool = std::move(file.m_ConstantPool);
@@ -81,26 +86,22 @@ namespace sgn {
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity) {
-		m_Functions.emplace_back();
-		m_Functions.back().Arity = arity;
+		m_Functions.emplace_back(new Function(arity));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(bool hasResult) {
-		m_Functions.emplace_back();
-		m_Functions.back().HasResult = hasResult;
+		m_Functions.emplace_back(new Function(hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity, bool hasResult) {
-		m_Functions.emplace_back();
-		m_Functions.back().Arity = arity;
-		m_Functions.back().HasResult = hasResult;
+		m_Functions.emplace_back(new Function(arity, hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	const Function* ByteFile::GetFunction(FunctionIndex index) const noexcept {
-		return &m_Functions[static_cast<std::size_t>(index)];
+		return m_Functions[static_cast<std::size_t>(index)];
 	}
 	Function* ByteFile::GetFunction(FunctionIndex index) noexcept {
-		return &m_Functions[static_cast<std::size_t>(index)];
+		return m_Functions[static_cast<std::size_t>(index)];
 	}
 
 	const Instructions* ByteFile::GetEntryPoint() const noexcept {
@@ -127,7 +128,7 @@ namespace sgn {
 		// Functions
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));
 		for (std::uint32_t i = 0; i < m_Functions.size(); ++i) {
-			m_Functions[i].Save(stream, m_ByteFileVersion, m_ByteCodeVersion);
+			m_Functions[i]->Save(stream, m_ByteFileVersion, m_ByteCodeVersion);
 		}
 
 		// Entry Point
