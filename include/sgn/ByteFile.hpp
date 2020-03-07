@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sgn/Constant.hpp>
 #include <sgn/ConstantPool.hpp>
 #include <sgn/Function.hpp>
 #include <sgn/Instruction.hpp>

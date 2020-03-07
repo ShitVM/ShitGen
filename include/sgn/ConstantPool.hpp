@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sgn/Constant.hpp>
 #include <sgn/Operand.hpp>
 #include <sgn/Version.hpp>
 
@@ -11,9 +10,9 @@
 namespace sgn {
 	class ConstantPool final {
 	private:
-		std::vector<IntConstant> m_IntPool;
-		std::vector<LongConstant> m_LongPool;
-		std::vector<DoubleConstant> m_DoublePool;
+		std::vector<std::uint32_t> m_IntPool;
+		std::vector<std::uint64_t> m_LongPool;
+		std::vector<double> m_DoublePool;
 
 	public:
 		ConstantPool() noexcept = default;
@@ -31,13 +30,13 @@ namespace sgn {
 
 		void Save(std::ofstream& stream, ByteFileVersion bfVersion) const;
 
-		std::uint32_t AddIntConstant(const IntConstant& intConstant);
-		std::uint32_t AddLongConstant(const LongConstant& longConstant);
-		std::uint32_t AddDoubleConstant(const DoubleConstant& doubleConstant);
+		std::uint32_t AddIntConstant(std::uint32_t intConstant);
+		std::uint32_t AddLongConstant(std::uint64_t longConstant);
+		std::uint32_t AddDoubleConstant(double doubleConstant);
 
-		std::uint32_t ContainsIntConstant(const IntConstant& intConstant) const noexcept;
-		std::uint32_t ContainsLongConstant(const LongConstant& longConstant) const noexcept;
-		std::uint32_t ContainsDoubleConstant(const DoubleConstant& doubleConstant) const noexcept;
+		std::uint32_t ContainsIntConstant(std::uint32_t intConstant) const noexcept;
+		std::uint32_t ContainsLongConstant(std::uint64_t longConstant) const noexcept;
+		std::uint32_t ContainsDoubleConstant(double doubleConstant) const noexcept;
 
 		std::uint32_t TransformRealIndex(IntConstantIndex index) const noexcept;
 		std::uint32_t TransformRealIndex(LongConstantIndex index) const noexcept;

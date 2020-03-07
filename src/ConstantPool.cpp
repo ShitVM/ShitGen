@@ -28,44 +28,44 @@ namespace sgn {
 	void ConstantPool::Save(std::ofstream& stream, ByteFileVersion) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(m_IntPool.size()));
 		for (std::uint32_t i = 0; i < m_IntPool.size(); ++i) {
-			WriteConstant(stream, m_IntPool[i].Value);
+			WriteConstant(stream, m_IntPool[i]);
 		}
 
 		WriteConstant(stream, static_cast<std::uint32_t>(m_LongPool.size()));
 		for (std::uint32_t i = 0; i < m_LongPool.size(); ++i) {
-			WriteConstant(stream, m_LongPool[i].Value);
+			WriteConstant(stream, m_LongPool[i]);
 		}
 
 		WriteConstant(stream, static_cast<std::uint32_t>(m_DoublePool.size()));
 		for (std::uint32_t i = 0; i < m_DoublePool.size(); ++i) {
-			WriteConstant(stream, m_DoublePool[i].Value);
+			WriteConstant(stream, m_DoublePool[i]);
 		}
 	}
 
-	std::uint32_t ConstantPool::AddIntConstant(const IntConstant& intConstant) {
+	std::uint32_t ConstantPool::AddIntConstant(std::uint32_t intConstant) {
 		m_IntPool.push_back(intConstant);
 		return static_cast<std::uint32_t>(m_IntPool.size() - 1);
 	}
-	std::uint32_t ConstantPool::AddLongConstant(const LongConstant& longConstant) {
+	std::uint32_t ConstantPool::AddLongConstant(std::uint64_t longConstant) {
 		m_LongPool.push_back(longConstant);
 		return static_cast<std::uint32_t>(m_LongPool.size() - 1);
 	}
-	std::uint32_t ConstantPool::AddDoubleConstant(const DoubleConstant& doubleConstant) {
+	std::uint32_t ConstantPool::AddDoubleConstant(double doubleConstant) {
 		m_DoublePool.push_back(doubleConstant);
 		return static_cast<std::uint32_t>(m_DoublePool.size() - 1);
 	}
 
-	std::uint32_t ConstantPool::ContainsIntConstant(const IntConstant& intConstant) const noexcept {
+	std::uint32_t ConstantPool::ContainsIntConstant(std::uint32_t intConstant) const noexcept {
 		const auto iter = std::find(m_IntPool.begin(), m_IntPool.end(), intConstant);
 		if (iter == m_IntPool.end()) return 0;
 		else return static_cast<std::uint32_t>(std::distance(m_IntPool.begin(), iter) + 1);
 	}
-	std::uint32_t ConstantPool::ContainsLongConstant(const LongConstant& longConstant) const noexcept {
+	std::uint32_t ConstantPool::ContainsLongConstant(std::uint64_t longConstant) const noexcept {
 		const auto iter = std::find(m_LongPool.begin(), m_LongPool.end(), longConstant);
 		if (iter == m_LongPool.end()) return 0;
 		else return static_cast<std::uint32_t>(std::distance(m_LongPool.begin(), iter) + 1);
 	}
-	std::uint32_t ConstantPool::ContainsDoubleConstant(const DoubleConstant& doubleConstant) const noexcept {
+	std::uint32_t ConstantPool::ContainsDoubleConstant(double doubleConstant) const noexcept {
 		const auto iter = std::find(m_DoublePool.begin(), m_DoublePool.end(), doubleConstant);
 		if (iter == m_DoublePool.end()) return 0;
 		else return static_cast<std::uint32_t>(std::distance(m_DoublePool.begin(), iter) + 1);
