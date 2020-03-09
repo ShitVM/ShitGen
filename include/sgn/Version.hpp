@@ -7,6 +7,7 @@ namespace sgn {
 		v0_1_0,
 		v0_2_0,
 
+		Least = v0_1_0,
 		Latest = v0_2_0,
 	};
 
@@ -14,6 +15,7 @@ namespace sgn {
 		v0_1_0,
 		v0_2_0,
 
+		Least = v0_1_0,
 		Latest = v0_2_0,
 	};
 }

@@ -1,12 +1,15 @@
 #include <sgn/Builder.hpp>
 
+#include <sgn/Version.hpp>
+
+#include <stdexcept>
 #include <utility>
 
 namespace sgn {
 	Builder::Builder(ByteFile& file, FunctionIndex index)
 		: m_ByteFile(&file) {
 		m_Instructions = &file.GetFunction(index)->Instructions;
-		m_LocalVariableIndex += file.GetFunction(index)->Arity;
+		m_LocalVariableIndex = file.GetFunction(index)->Arity;
 
 		file.CreatedBuilder();
 	}
@@ -22,6 +25,7 @@ namespace sgn {
 		m_ByteFile = builder.m_ByteFile;
 		m_Instructions = builder.m_Instructions;
 		m_LocalVariableIndex = builder.m_LocalVariableIndex;
+		m_ReservedLabels = std::move(builder.m_ReservedLabels);
 		return *this;
 	}
 

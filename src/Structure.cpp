@@ -17,7 +17,7 @@ namespace sgn {
 
 	void Structure::Save(std::ofstream& stream) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(Fields.size()));
-		for (std::uint32_t i = 0; i < Fields.size(); ++i) {
+		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(Fields.size()); ++i) {
 			WriteConstant(stream, Fields[i]->Code);
 		}
 	}

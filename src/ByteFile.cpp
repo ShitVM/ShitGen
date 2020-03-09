@@ -26,6 +26,7 @@ namespace sgn {
 
 	ByteFile& ByteFile::operator=(ByteFile&& file) noexcept {
 		m_ConstantPool = std::move(file.m_ConstantPool);
+		m_Structures = std::move(file.m_Structures);
 		m_Functions = std::move(file.m_Functions);
 		m_EntryPoint = std::move(file.m_EntryPoint);
 
@@ -142,14 +143,14 @@ namespace sgn {
 		// Structures
 		if (m_ByteFileVersion >= ByteFileVersion::v0_2_0) {
 			WriteConstant(stream, static_cast<std::uint32_t>(m_Structures.size()));
-			for (std::uint32_t i = 0; i < m_Structures.size(); ++i) {
+			for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_Structures.size()); ++i) {
 				m_Structures[i]->Save(stream);
 			}
 		}
 
 		// Functions
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));
-		for (std::uint32_t i = 0; i < m_Functions.size(); ++i) {
+		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_Functions.size()); ++i) {
 			m_Functions[i]->Save(stream, m_ByteFileVersion, m_ByteCodeVersion);
 		}
 

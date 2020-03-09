@@ -27,17 +27,17 @@ namespace sgn {
 
 	void ConstantPool::Save(std::ofstream& stream, ByteFileVersion) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(m_IntPool.size()));
-		for (std::uint32_t i = 0; i < m_IntPool.size(); ++i) {
+		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_IntPool.size()); ++i) {
 			WriteConstant(stream, m_IntPool[i]);
 		}
 
 		WriteConstant(stream, static_cast<std::uint32_t>(m_LongPool.size()));
-		for (std::uint32_t i = 0; i < m_LongPool.size(); ++i) {
+		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_LongPool.size()); ++i) {
 			WriteConstant(stream, m_LongPool[i]);
 		}
 
 		WriteConstant(stream, static_cast<std::uint32_t>(m_DoublePool.size()));
-		for (std::uint32_t i = 0; i < m_DoublePool.size(); ++i) {
+		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_DoublePool.size()); ++i) {
 			WriteConstant(stream, m_DoublePool[i]);
 		}
 	}
