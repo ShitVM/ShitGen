@@ -3,6 +3,7 @@
 #include <sgn/Memory.hpp>
 
 #include <fstream>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -14,14 +15,6 @@ namespace sgn {
 		file.m_ByteCodeVersion = ByteCodeVersion::Latest;
 
 		file.m_HasBuilder = false;
-	}
-	ByteFile::~ByteFile() {
-		for (const auto& function : m_Functions) {
-			delete function;
-		}
-		for (const auto& structure : m_Structures) {
-			delete structure;
-		}
 	}
 
 	ByteFile& ByteFile::operator=(ByteFile&& file) noexcept {
@@ -86,37 +79,40 @@ namespace sgn {
 	}
 
 	StructureIndex ByteFile::AddStructure() {
-		m_Structures.push_back(new Structure());
+		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + 1);
+		const std::string name = "structure" + std::to_string(number);
+
+		m_Structures.push_back(std::make_unique<Structure>(Type(name, number)));
 		return static_cast<StructureIndex>(m_Structures.size() - 1);
 	}
 	const Structure* ByteFile::GetStructure(StructureIndex index) const noexcept {
-		return m_Structures[static_cast<std::size_t>(index)];
+		return m_Structures[static_cast<std::size_t>(index)].get();
 	}
 	Structure* ByteFile::GetStructure(StructureIndex index) noexcept {
-		return m_Structures[static_cast<std::size_t>(index)];
+		return m_Structures[static_cast<std::size_t>(index)].get();
 	}
 
 	FunctionIndex ByteFile::AddFunction() {
-		m_Functions.push_back(new Function());
+		m_Functions.push_back(std::make_unique<Function>());
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity) {
-		m_Functions.push_back(new Function(arity));
+		m_Functions.push_back(std::make_unique<Function>(arity));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(bool hasResult) {
-		m_Functions.push_back(new Function(hasResult));
+		m_Functions.push_back(std::make_unique<Function>(hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity, bool hasResult) {
-		m_Functions.push_back(new Function(arity, hasResult));
+		m_Functions.push_back(std::make_unique<Function>(arity, hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	const Function* ByteFile::GetFunction(FunctionIndex index) const noexcept {
-		return m_Functions[static_cast<std::size_t>(index)];
+		return m_Functions[static_cast<std::size_t>(index)].get();
 	}
 	Function* ByteFile::GetFunction(FunctionIndex index) noexcept {
-		return m_Functions[static_cast<std::size_t>(index)];
+		return m_Functions[static_cast<std::size_t>(index)].get();
 	}
 
 	const Instructions* ByteFile::GetEntryPoint() const noexcept {

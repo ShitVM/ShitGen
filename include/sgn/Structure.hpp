@@ -8,11 +8,14 @@
 namespace sgn {
 	class Structure final {
 	public:
-		std::vector<const Type*> Fields;
+		std::vector<const sgn::Type*> Fields;
+		sgn::Type Type;
 
 	public:
 		Structure() noexcept = default;
-		explicit Structure(std::vector<const Type*> fields) noexcept;
+		explicit Structure(std::vector<const sgn::Type*> fields) noexcept;
+		explicit Structure(sgn::Type&& type) noexcept;
+		Structure(std::vector<const sgn::Type*> fields, sgn::Type&& type) noexcept;
 		Structure(Structure&& structures) noexcept;
 		~Structure() = default;
 
@@ -25,5 +28,6 @@ namespace sgn {
 		void Save(std::ofstream& stream) const;
 	};
 
-	using Structures = std::vector<Structure*>;
+	using StructurePtr = std::unique_ptr<Structure>;
+	using Structures = std::vector<StructurePtr>;
 }

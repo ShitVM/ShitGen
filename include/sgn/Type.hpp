@@ -10,8 +10,9 @@ namespace sgn {
 		std::uint32_t Code = 0;
 
 	public:
+		Type() noexcept = default;
 		Type(std::string name, std::uint32_t code) noexcept;
-		Type(const Type&) = delete;
+		Type(Type&& type) noexcept;
 		virtual ~Type() = default;
 
 	public:

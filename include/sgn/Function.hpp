@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <fstream>
+#include <memory>
 #include <vector>
 
 namespace sgn {
@@ -31,5 +32,6 @@ namespace sgn {
 		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion) const;
 	};
 
-	using Functions = std::vector<Function*>;
+	using FunctionPtr = std::unique_ptr<Function>;
+	using Functions = std::vector<FunctionPtr>;
 }

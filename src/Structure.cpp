@@ -5,10 +5,14 @@
 #include <utility>
 
 namespace sgn {
-	Structure::Structure(std::vector<const Type*> fields) noexcept
+	Structure::Structure(std::vector<const sgn::Type*> fields) noexcept
 		: Fields(std::move(fields)) {}
+	Structure::Structure(sgn::Type&& type) noexcept
+		: Type(std::move(type)) {}
+	Structure::Structure(std::vector<const sgn::Type*> fields, sgn::Type&& type) noexcept
+		: Fields(std::move(fields)), Type(std::move(type)) {}
 	Structure::Structure(Structure&& structure) noexcept
-		: Fields(std::move(structure.Fields)) {}
+		: Fields(std::move(structure.Fields)), Type(std::move(structure.Type)) {}
 
 	Structure& Structure::operator=(Structure&& structure) noexcept {
 		Fields = std::move(structure.Fields);

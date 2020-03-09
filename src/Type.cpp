@@ -5,6 +5,8 @@
 namespace sgn {
 	Type::Type(std::string name, std::uint32_t code) noexcept
 		: Name(std::move(name)), Code(code) {}
+	Type::Type(Type&& type) noexcept
+		: Name(std::move(type.Name)), Code(type.Code) {}
 
 	namespace {
 		static const Type s_IntType("int", 3);
