@@ -77,6 +77,7 @@ void Builder:: opCode(indexType index) {									\
 	InstructionWithOperandImpl(Push, IntConstantIndex, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, LongConstantIndex, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, DoubleConstantIndex, ByteCodeVersion::v0_1_0);
+	InstructionWithOperandImpl(Push, StructureIndex, ByteCodeVersion::v0_2_0);
 	InstructionImpl(Pop, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Load, LocalVariableIndex, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Store, LocalVariableIndex, ByteCodeVersion::v0_1_0);

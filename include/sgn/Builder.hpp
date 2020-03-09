@@ -41,6 +41,7 @@ namespace sgn {
 		void Push(IntConstantIndex index);
 		void Push(LongConstantIndex index);
 		void Push(DoubleConstantIndex index);
+		void Push(StructureIndex index);
 		void Pop();
 		void Load(LocalVariableIndex index);
 		void Store(LocalVariableIndex index);

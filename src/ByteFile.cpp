@@ -16,8 +16,11 @@ namespace sgn {
 		file.m_HasBuilder = false;
 	}
 	ByteFile::~ByteFile() {
-		for (const auto& func : m_Functions) {
-			delete func;
+		for (const auto& function : m_Functions) {
+			delete function;
+		}
+		for (const auto& structure : m_Structures) {
+			delete structure;
 		}
 	}
 
@@ -81,20 +84,31 @@ namespace sgn {
 		return static_cast<DoubleConstantIndex>(m_ConstantPool.AddDoubleConstant(value));
 	}
 
+	StructureIndex ByteFile::AddStructure() {
+		m_Structures.push_back(new Structure());
+		return static_cast<StructureIndex>(m_Structures.size() - 1);
+	}
+	const Structure* ByteFile::GetStructure(StructureIndex index) const noexcept {
+		return m_Structures[static_cast<std::size_t>(index)];
+	}
+	Structure* ByteFile::GetStructure(StructureIndex index) noexcept {
+		return m_Structures[static_cast<std::size_t>(index)];
+	}
+
 	FunctionIndex ByteFile::AddFunction() {
-		m_Functions.emplace_back();
+		m_Functions.push_back(new Function());
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity) {
-		m_Functions.emplace_back(new Function(arity));
+		m_Functions.push_back(new Function(arity));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(bool hasResult) {
-		m_Functions.emplace_back(new Function(hasResult));
+		m_Functions.push_back(new Function(hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	FunctionIndex ByteFile::AddFunction(std::uint16_t arity, bool hasResult) {
-		m_Functions.emplace_back(new Function(arity, hasResult));
+		m_Functions.push_back(new Function(arity, hasResult));
 		return static_cast<FunctionIndex>(m_Functions.size() - 1);
 	}
 	const Function* ByteFile::GetFunction(FunctionIndex index) const noexcept {
@@ -124,6 +138,14 @@ namespace sgn {
 
 		// Constant Pool
 		m_ConstantPool.Save(stream, m_ByteFileVersion);
+
+		// Structures
+		if (m_ByteFileVersion >= ByteFileVersion::v0_2_0) {
+			WriteConstant(stream, static_cast<std::uint32_t>(m_Structures.size()));
+			for (std::uint32_t i = 0; i < m_Structures.size(); ++i) {
+				m_Structures[i]->Save(stream);
+			}
+		}
 
 		// Functions
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));

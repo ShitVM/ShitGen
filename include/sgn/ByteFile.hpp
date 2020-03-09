@@ -3,6 +3,7 @@
 #include <sgn/ConstantPool.hpp>
 #include <sgn/Function.hpp>
 #include <sgn/Instruction.hpp>
+#include <sgn/Structure.hpp>
 #include <sgn/Operand.hpp>
 #include <sgn/Version.hpp>
 
@@ -13,6 +14,7 @@ namespace sgn {
 	class ByteFile final {
 	private:
 		ConstantPool m_ConstantPool;
+		Structures m_Structures;
 		Functions m_Functions;
 		Instructions m_EntryPoint;
 
@@ -45,6 +47,10 @@ namespace sgn {
 		IntConstantIndex AddIntConstantFast(std::uint32_t value);
 		LongConstantIndex AddLongConstantFast(std::uint64_t value);
 		DoubleConstantIndex AddDoubleConstantFast(double value);
+
+		StructureIndex AddStructure();
+		const Structure* GetStructure(StructureIndex index) const noexcept;
+		Structure* GetStructure(StructureIndex index) noexcept;
 
 		FunctionIndex AddFunction();
 		FunctionIndex AddFunction(std::uint16_t arity);

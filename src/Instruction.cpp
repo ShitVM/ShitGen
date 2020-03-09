@@ -50,9 +50,10 @@ namespace sgn {
 			case 1: WriteConstant(stream, std::get<IntConstantIndex>(inst.Operand)); break;
 			case 2: WriteConstant(stream, std::get<LongConstantIndex>(inst.Operand)); break;
 			case 3: WriteConstant(stream, std::get<DoubleConstantIndex>(inst.Operand)); break;
-			case 4: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
-			case 5: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
-			case 6: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
+			case 4: WriteConstant(stream, std::get<StructureIndex>(inst.Operand)); break;
+			case 5: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
+			case 6: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
+			case 7: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
 			}
 		}
 	}
