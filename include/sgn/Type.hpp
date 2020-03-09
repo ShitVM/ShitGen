@@ -16,7 +16,7 @@ namespace sgn {
 		virtual ~Type() = default;
 
 	public:
-		Type& operator=(const Type&) = delete;
+		Type& operator=(Type&& type) noexcept;
 		bool operator==(const Type&) = delete;
 		bool operator!=(const Type&) = delete;
 	};

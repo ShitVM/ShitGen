@@ -8,8 +8,8 @@
 namespace sgn {
 	Builder::Builder(ByteFile& file, FunctionIndex index)
 		: m_ByteFile(&file) {
-		m_Instructions = &file.GetFunction(index)->Instructions;
-		m_LocalVariableIndex = file.GetFunction(index)->Arity;
+		m_Instructions = &file.GetFunction(index)->Instructions();
+		m_LocalVariableIndex = file.GetFunction(index)->GetArity();
 
 		file.CreatedBuilder();
 	}

@@ -6,24 +6,37 @@
 
 namespace sgn {
 	Function::Function(std::uint16_t arity) noexcept
-		: Arity(arity) {}
+		: m_Arity(arity) {}
 	Function::Function(bool hasResult) noexcept
-		: HasResult(hasResult) {}
+		: m_HasResult(hasResult) {}
 	Function::Function(std::uint16_t arity, bool hasResult) noexcept
-		: Arity(arity), HasResult(hasResult) {}
+		: m_Arity(arity), m_HasResult(hasResult) {}
 	Function::Function(Function&& function) noexcept
-		: Arity(function.Arity), HasResult(function.HasResult), Instructions(std::move(function.Instructions)) {}
+		: m_Arity(function.m_Arity), m_HasResult(function.m_HasResult), m_Instructions(std::move(function.m_Instructions)) {}
 
 	Function& Function::operator=(Function&& function) noexcept {
-		Arity = function.Arity;
-		HasResult = function.HasResult;
-		Instructions = std::move(function.Instructions);
+		m_Arity = function.m_Arity;
+		m_HasResult = function.m_HasResult;
+		m_Instructions = std::move(function.m_Instructions);
 		return *this;
 	}
 
 	void Function::Save(std::ofstream& stream, ByteFileVersion, ByteCodeVersion bcVersion) const {
-		WriteConstant(stream, Arity);
-		WriteConstant(stream, HasResult);
-		Instructions.Save(stream, bcVersion);
+		WriteConstant(stream, m_Arity);
+		WriteConstant(stream, m_HasResult);
+		m_Instructions.Save(stream, bcVersion);
+	}
+
+	std::uint16_t Function::GetArity() const noexcept {
+		return m_Arity;
+	}
+	bool Function::HasResult() const noexcept {
+		return m_HasResult;
+	}
+	const Instructions& Function::GetInstructions() const noexcept {
+		return m_Instructions;
+	}
+	Instructions& Function::Instructions() noexcept {
+		return m_Instructions;
 	}
 }

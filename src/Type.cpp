@@ -8,6 +8,12 @@ namespace sgn {
 	Type::Type(Type&& type) noexcept
 		: Name(std::move(type.Name)), Code(type.Code) {}
 
+	Type& Type::operator=(Type&& type) noexcept {
+		Name = std::move(type.Name);
+		Code = type.Code;
+		return *this;
+	}
+
 	namespace {
 		static const Type s_IntType("int", 3);
 		static const Type s_LongType("long", 4);

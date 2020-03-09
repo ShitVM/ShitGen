@@ -10,10 +10,10 @@
 
 namespace sgn {
 	class Function final {
-	public:
-		std::uint16_t Arity = 0;
-		bool HasResult = false;
-		sgn::Instructions Instructions;
+	private:
+		std::uint16_t m_Arity = 0;
+		bool m_HasResult = false;
+		sgn::Instructions m_Instructions;
 
 	public:
 		Function() noexcept = default;
@@ -30,6 +30,11 @@ namespace sgn {
 
 	public:
 		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion) const;
+
+		std::uint16_t GetArity() const noexcept;
+		bool HasResult() const noexcept;
+		const Instructions& GetInstructions() const noexcept;
+		Instructions& Instructions() noexcept;
 	};
 
 	using FunctionPtr = std::unique_ptr<Function>;
