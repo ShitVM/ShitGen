@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sgn/ConstantPool.hpp>
 #include <sgn/Operand.hpp>
 #include <sgn/Version.hpp>
 
@@ -107,7 +108,7 @@ namespace sgn {
 		bool operator!=(const Instructions&) = delete;
 
 	public:
-		void Save(std::ofstream& stream, ByteCodeVersion bcVersion) const;
+		void Save(std::ofstream& stream, ByteCodeVersion bcVersion, const ConstantPool& constantPool) const;
 
 		std::uint32_t GetLabelCount() const noexcept;
 		std::uint64_t GetInstructionCount() const noexcept;

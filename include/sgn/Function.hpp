@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sgn/ConstantPool.hpp>
 #include <sgn/Instruction.hpp>
 #include <sgn/Version.hpp>
 
@@ -29,7 +30,7 @@ namespace sgn {
 		bool operator!=(const Function&) = delete;
 
 	public:
-		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion) const;
+		void Save(std::ofstream& stream, ByteFileVersion bfVersion, ByteCodeVersion bcVersion, const ConstantPool& constantPool) const;
 
 		std::uint16_t GetArity() const noexcept;
 		bool HasResult() const noexcept;

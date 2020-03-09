@@ -42,6 +42,10 @@ namespace sgn {
 		}
 	}
 
+	std::uint32_t ConstantPool::GetAllCount() const noexcept {
+		return GetIntConstantCount() + GetLongConstantCount() + GetDoubleConstantCount();
+	}
+
 	std::uint32_t ConstantPool::AddIntConstant(std::uint32_t intConstant) {
 		m_IntPool.push_back(intConstant);
 		return static_cast<std::uint32_t>(m_IntPool.size() - 1);

@@ -35,7 +35,7 @@ namespace sgn {
 		return *this;
 	}
 
-	void Instructions::Save(std::ofstream& stream, ByteCodeVersion bcVersion) const {
+	void Instructions::Save(std::ofstream& stream, ByteCodeVersion bcVersion, const ConstantPool& constantPool) const {
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Labels.size()));
 		for (std::uint32_t i = 0; i < m_Labels.size(); ++i) {
 			WriteConstant(stream, m_Labels[i]);
@@ -47,10 +47,10 @@ namespace sgn {
 			WriteConstant(stream, TransformOpCode(inst.OpCode, bcVersion));
 
 			switch (inst.Operand.index()) {
-			case 1: WriteConstant(stream, std::get<IntConstantIndex>(inst.Operand)); break;
-			case 2: WriteConstant(stream, std::get<LongConstantIndex>(inst.Operand)); break;
-			case 3: WriteConstant(stream, std::get<DoubleConstantIndex>(inst.Operand)); break;
-			case 4: WriteConstant(stream, std::get<StructureIndex>(inst.Operand)); break;
+			case 1: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
+			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
+			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
+			case 4: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
 			case 5: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
 			case 6: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
 			case 7: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;

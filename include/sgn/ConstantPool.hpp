@@ -30,6 +30,8 @@ namespace sgn {
 
 		void Save(std::ofstream& stream, ByteFileVersion bfVersion) const;
 
+		std::uint32_t GetAllCount() const noexcept;
+
 		std::uint32_t AddIntConstant(std::uint32_t intConstant);
 		std::uint32_t AddLongConstant(std::uint64_t longConstant);
 		std::uint32_t AddDoubleConstant(double doubleConstant);

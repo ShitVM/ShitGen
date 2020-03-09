@@ -21,10 +21,10 @@ namespace sgn {
 		return *this;
 	}
 
-	void Function::Save(std::ofstream& stream, ByteFileVersion, ByteCodeVersion bcVersion) const {
+	void Function::Save(std::ofstream& stream, ByteFileVersion, ByteCodeVersion bcVersion, const ConstantPool& constantPool) const {
 		WriteConstant(stream, m_Arity);
 		WriteConstant(stream, m_HasResult);
-		m_Instructions.Save(stream, bcVersion);
+		m_Instructions.Save(stream, bcVersion, constantPool);
 	}
 
 	std::uint16_t Function::GetArity() const noexcept {

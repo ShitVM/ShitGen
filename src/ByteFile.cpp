@@ -147,10 +147,10 @@ namespace sgn {
 		// Functions
 		WriteConstant(stream, static_cast<std::uint32_t>(m_Functions.size()));
 		for (std::uint32_t i = 0; i < static_cast<std::uint32_t>(m_Functions.size()); ++i) {
-			m_Functions[i]->Save(stream, m_ByteFileVersion, m_ByteCodeVersion);
+			m_Functions[i]->Save(stream, m_ByteFileVersion, m_ByteCodeVersion, m_ConstantPool);
 		}
 
 		// Entry Point
-		m_EntryPoint.Save(stream, m_ByteCodeVersion);
+		m_EntryPoint.Save(stream, m_ByteCodeVersion, m_ConstantPool);
 	}
 }
