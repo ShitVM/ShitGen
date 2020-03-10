@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sgn/Operand.hpp>
 #include <sgn/Type.hpp>
 
 #include <fstream>
@@ -29,7 +30,8 @@ namespace sgn {
 
 		std::uint32_t GetFieldCount() const noexcept;
 
-		void AddField(const Type* type);
+		FieldIndex AddField(const Type* type);
+		FieldIndex GetField(std::uint32_t index) const noexcept;
 
 		const Type* GetType() const noexcept;
 	};

@@ -2,6 +2,7 @@
 
 #include <sgn/Memory.hpp>
 
+#include <cassert>
 #include <utility>
 
 namespace sgn {
@@ -30,8 +31,13 @@ namespace sgn {
 		return static_cast<std::uint32_t>(m_Fields.size());
 	}
 
-	void Structure::AddField(const Type* type) {
+	FieldIndex Structure::AddField(const Type* type) {
 		m_Fields.push_back(type);
+		return static_cast<FieldIndex>(m_Fields.size() - 1);
+	}
+	FieldIndex Structure::GetField(std::uint32_t index) const noexcept {
+		assert(index < m_Fields.size());
+		return static_cast<FieldIndex>(index);
 	}
 
 	const Type* Structure::GetType() const noexcept {

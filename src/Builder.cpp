@@ -2,6 +2,7 @@
 
 #include <sgn/Version.hpp>
 
+#include <cassert>
 #include <stdexcept>
 #include <utility>
 
@@ -36,7 +37,8 @@ namespace sgn {
 		return *m_ByteFile;
 	}
 
-	LocalVariableIndex Builder::GetArgument(std::uint32_t index) {
+	LocalVariableIndex Builder::GetArgument(std::uint32_t index) const noexcept {
+		assert(index < m_LocalVariableIndex);
 		return static_cast<LocalVariableIndex>(index);
 	}
 	LocalVariableIndex Builder::AddLocalVariable() {
@@ -86,6 +88,7 @@ void Builder:: opCode(indexType index) {									\
 	InstructionWithOperandImpl(Load, LocalVariableIndex, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Store, LocalVariableIndex, ByteCodeVersion::v0_1_0);
 	InstructionWithOperandImpl(Lea, LocalVariableIndex, ByteCodeVersion::v0_2_0);
+	InstructionWithOperandImpl(FLea, FieldIndex, ByteCodeVersion::v0_2_0);
 	InstructionImpl(TLoad, ByteCodeVersion::v0_2_0);
 	InstructionImpl(TStore, ByteCodeVersion::v0_2_0);
 	InstructionImpl(Copy, ByteCodeVersion::v0_2_0);

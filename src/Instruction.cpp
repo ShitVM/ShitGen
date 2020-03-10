@@ -51,9 +51,10 @@ namespace sgn {
 			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
 			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
 			case 4: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
-			case 5: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
-			case 6: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
-			case 7: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
+			case 5: WriteConstant(stream, std::get<FieldIndex>(inst.Operand));
+			case 6: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
+			case 7: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
+			case 8: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
 			}
 		}
 	}
@@ -81,7 +82,7 @@ namespace sgn {
 		}
 
 		if (opCode >= OpCode::Add) {
-			opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 5);
+			opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 6);
 		}
 
 		return opCode;
