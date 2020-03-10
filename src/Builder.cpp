@@ -10,7 +10,8 @@ namespace sgn {
 	Builder::Builder(ByteFile& file, FunctionIndex index)
 		: m_ByteFile(&file) {
 		m_Instructions = &file.GetFunction(index)->Instructions();
-		m_LocalVariableIndex = file.GetFunction(index)->GetArity();
+		m_Function = file.GetFunction(index);
+		m_LocalVariableIndex = m_Function->GetArity();
 
 		file.CreatedBuilder();
 	}
@@ -19,11 +20,12 @@ namespace sgn {
 		file.CreatedBuilder();
 	}
 	Builder::Builder(Builder&& builder) noexcept
-		: m_ByteFile(builder.m_ByteFile), m_Instructions(builder.m_Instructions), m_LocalVariableIndex(builder.m_LocalVariableIndex),
+		: m_ByteFile(builder.m_ByteFile), m_Function(builder.m_Function), m_Instructions(builder.m_Instructions), m_LocalVariableIndex(builder.m_LocalVariableIndex),
 		m_ReservedLabels(std::move(builder.m_ReservedLabels)) {}
 
 	Builder& Builder::operator=(Builder&& builder) noexcept {
 		m_ByteFile = builder.m_ByteFile;
+		m_Function = builder.m_Function;
 		m_Instructions = builder.m_Instructions;
 		m_LocalVariableIndex = builder.m_LocalVariableIndex;
 		m_ReservedLabels = std::move(builder.m_ReservedLabels);
@@ -38,7 +40,8 @@ namespace sgn {
 	}
 
 	LocalVariableIndex Builder::GetArgument(std::uint32_t index) const noexcept {
-		assert(index < m_LocalVariableIndex);
+		assert(m_Function != nullptr);
+		assert(index < m_Function->GetArity());
 		return static_cast<LocalVariableIndex>(index);
 	}
 	LocalVariableIndex Builder::AddLocalVariable() {

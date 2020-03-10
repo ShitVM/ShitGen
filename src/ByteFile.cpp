@@ -9,8 +9,10 @@
 
 namespace sgn {
 	ByteFile::ByteFile(ByteFile&& file) noexcept
-		: m_ConstantPool(std::move(file.m_ConstantPool)), m_Functions(std::move(file.m_Functions)), m_EntryPoint(std::move(file.m_EntryPoint)),
-		m_ByteFileVersion(file.m_ByteFileVersion), m_ByteCodeVersion(file.m_ByteCodeVersion), m_HasBuilder(file.m_HasBuilder) {
+		: m_ConstantPool(std::move(file.m_ConstantPool)), m_Structures(std::move(file.m_Structures)),
+		m_Functions(std::move(file.m_Functions)), m_EntryPoint(std::move(file.m_EntryPoint)),
+		m_ByteFileVersion(file.m_ByteFileVersion), m_ByteCodeVersion(file.m_ByteCodeVersion),
+		m_HasBuilder(file.m_HasBuilder) {
 		file.m_ByteFileVersion = ByteFileVersion::Latest;
 		file.m_ByteCodeVersion = ByteCodeVersion::Latest;
 
@@ -79,6 +81,8 @@ namespace sgn {
 	}
 
 	StructureIndex ByteFile::AddStructure() {
+		if (m_ByteFileVersion < ByteFileVersion::v0_2_0) throw std::runtime_error("Incompatible feature");
+
 		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + 1);
 		const std::string name = "structure" + std::to_string(number);
 

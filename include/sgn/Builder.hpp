@@ -11,6 +11,7 @@ namespace sgn {
 	class Builder final {
 	private:
 		ByteFile* m_ByteFile = nullptr;
+		Function* m_Function = nullptr;
 		Instructions* m_Instructions = nullptr;
 		std::uint32_t m_LocalVariableIndex = 0;
 		std::unordered_map<std::string, LabelIndex> m_ReservedLabels;
