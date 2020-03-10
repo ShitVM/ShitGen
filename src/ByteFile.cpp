@@ -83,8 +83,8 @@ namespace sgn {
 	StructureIndex ByteFile::AddStructure() {
 		if (m_ByteFileVersion < ByteFileVersion::v0_2_0) throw std::runtime_error("Incompatible feature");
 
-		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() - 1 + 10);
-		const std::string name = "structure" + std::to_string(number);
+		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + 10);
+		const std::string name = "structure" + std::to_string(number - 10);
 
 		m_Structures.push_back(std::make_unique<Structure>(Type(name, number)));
 		return static_cast<StructureIndex>(m_Structures.size() - 1);
