@@ -4,6 +4,7 @@
 #include <sgn/Type.hpp>
 
 #include <fstream>
+#include <memory>
 #include <vector>
 
 namespace sgn {

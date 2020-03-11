@@ -34,8 +34,8 @@ namespace sgn {
 
 		std::uint16_t GetArity() const noexcept;
 		bool HasResult() const noexcept;
-		const Instructions& GetInstructions() const noexcept;
-		Instructions& Instructions() noexcept;
+		const sgn::Instructions& GetInstructions() const noexcept;
+		sgn::Instructions& Instructions() noexcept;
 	};
 
 	using FunctionPtr = std::unique_ptr<Function>;

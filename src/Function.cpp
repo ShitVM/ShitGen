@@ -33,10 +33,10 @@ namespace sgn {
 	bool Function::HasResult() const noexcept {
 		return m_HasResult;
 	}
-	const Instructions& Function::GetInstructions() const noexcept {
+	const sgn::Instructions& Function::GetInstructions() const noexcept {
 		return m_Instructions;
 	}
-	Instructions& Function::Instructions() noexcept {
+	sgn::Instructions& Function::Instructions() noexcept {
 		return m_Instructions;
 	}
 }
