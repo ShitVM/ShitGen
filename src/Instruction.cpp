@@ -47,7 +47,7 @@ namespace sgn {
 			WriteConstant(stream, TransformOpCode(inst.OpCode, bcVersion));
 
 			switch (inst.Operand.index()) {
-			case 1: WriteConstant(stream, std::get<TypeIndex>(inst.Operand));
+			case 1: WriteConstant(stream, std::get<TypeIndex>(inst.Operand)); break;
 			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
 			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
 			case 4: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
