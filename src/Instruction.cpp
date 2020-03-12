@@ -47,14 +47,15 @@ namespace sgn {
 			WriteConstant(stream, TransformOpCode(inst.OpCode, bcVersion));
 
 			switch (inst.Operand.index()) {
-			case 1: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
-			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
-			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
-			case 4: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
-			case 5: WriteConstant(stream, std::get<FieldIndex>(inst.Operand)); break;
-			case 6: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
-			case 7: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
-			case 8: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
+			case 1: WriteConstant(stream, std::get<TypeIndex>(inst.Operand));
+			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
+			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
+			case 4: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
+			case 5: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
+			case 6: WriteConstant(stream, std::get<FieldIndex>(inst.Operand)); break;
+			case 7: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
+			case 8: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
+			case 9: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
 			}
 		}
 	}
@@ -77,12 +78,23 @@ namespace sgn {
 	}
 
 	OpCode Instructions::TransformOpCode(OpCode opCode, ByteCodeVersion bcVersion) const {
-		if (bcVersion >= ByteCodeVersion::v0_2_0) {
+		if (bcVersion >= ByteCodeVersion::Latest) {
 			return opCode;
 		}
 
-		if (opCode >= OpCode::Add) {
-			opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 6);
+		if (bcVersion <= ByteCodeVersion::v0_2_0) {
+			if (OpCode::ToI <= opCode) {
+				opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 2);
+			}
+			if (OpCode::ToD <= opCode) {
+				opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 1);
+			}
+		}
+
+		if (bcVersion <= ByteCodeVersion::v0_1_0) {
+			if (opCode >= OpCode::Add) {
+				opCode = static_cast<OpCode>(static_cast<std::uint8_t>(opCode) - 6);
+			}
 		}
 
 		return opCode;

@@ -134,4 +134,8 @@ void Builder:: opCode(indexType index) {									\
 	InstructionImpl(ToL, ByteCodeVersion::v0_1_0);
 	InstructionImpl(ToD, ByteCodeVersion::v0_1_0);
 	InstructionImpl(ToP, ByteCodeVersion::v0_2_0);
+
+	InstructionImpl(Null, ByteCodeVersion::v0_3_0);
+	InstructionWithOperandImpl(New, TypeIndex, ByteCodeVersion::v0_3_0);
+	InstructionImpl(Delete, ByteCodeVersion::v0_3_0);
 }

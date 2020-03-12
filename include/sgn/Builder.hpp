@@ -90,5 +90,9 @@ namespace sgn {
 		void ToL();
 		void ToD();
 		void ToP();
+
+		void Null();
+		void New(TypeIndex index);
+		void Delete();
 	};
 }

@@ -56,10 +56,17 @@ namespace sgn {
 		Call,
 		Ret,
 
+		ToB,
+		ToS,
 		ToI,
 		ToL,
+		ToF,
 		ToD,
 		ToP,
+
+		Null,
+		New,
+		Delete,
 	};
 }
 

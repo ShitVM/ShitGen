@@ -41,6 +41,9 @@ namespace sgn {
 
 		void CreatedBuilder() noexcept;
 
+		TypeIndex GetTypeIndex(const Type* type) const noexcept;
+		TypeIndex GetTypeIndex(StructureIndex structure) const noexcept;
+
 		IntConstantIndex AddIntConstant(std::uint32_t value);
 		LongConstantIndex AddLongConstant(std::uint64_t value);
 		DoubleConstantIndex AddDoubleConstant(double value);
@@ -49,6 +52,8 @@ namespace sgn {
 		DoubleConstantIndex AddDoubleConstantFast(double value);
 
 		StructureIndex AddStructure();
+		const Structure* GetStructure(TypeIndex index) const noexcept;
+		Structure* GetStructure(TypeIndex index) noexcept;
 		const Structure* GetStructure(StructureIndex index) const noexcept;
 		Structure* GetStructure(StructureIndex index) noexcept;
 

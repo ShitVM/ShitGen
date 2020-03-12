@@ -14,8 +14,9 @@ namespace sgn {
 	enum class ByteCodeVersion : std::uint16_t {
 		v0_1_0,
 		v0_2_0,
+		v0_3_0,
 
 		Least = v0_1_0,
-		Latest = v0_2_0,
+		Latest = v0_3_0,
 	};
 }

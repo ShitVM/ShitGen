@@ -2,6 +2,7 @@
 
 #include <sgn/Memory.hpp>
 
+#include <cassert>
 #include <fstream>
 #include <memory>
 #include <stdexcept>
@@ -55,6 +56,13 @@ namespace sgn {
 		m_HasBuilder = true;
 	}
 
+	TypeIndex ByteFile::GetTypeIndex(const Type* type) const noexcept {
+		return static_cast<TypeIndex>(type->Code);
+	}
+	TypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
+		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + 10);
+	}
+
 	IntConstantIndex ByteFile::AddIntConstant(std::uint32_t value) {
 		if (const auto dis = m_ConstantPool.ContainsIntConstant(value); dis) {
 			return static_cast<IntConstantIndex>(dis - 1);
@@ -88,6 +96,16 @@ namespace sgn {
 
 		m_Structures.push_back(std::make_unique<Structure>(Type(name, number)));
 		return static_cast<StructureIndex>(m_Structures.size() - 1);
+	}
+	const Structure* ByteFile::GetStructure(TypeIndex index) const noexcept {
+		assert(static_cast<std::uint32_t>(index) >= 10);
+
+		return m_Structures[static_cast<std::uint32_t>(index) - 10].get();
+	}
+	Structure* ByteFile::GetStructure(TypeIndex index) noexcept {
+		assert(static_cast<std::uint32_t>(index) >= 10);
+
+		return m_Structures[static_cast<std::uint32_t>(index) - 10].get();
 	}
 	const Structure* ByteFile::GetStructure(StructureIndex index) const noexcept {
 		return m_Structures[static_cast<std::size_t>(index)].get();
