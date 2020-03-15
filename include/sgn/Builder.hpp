@@ -94,5 +94,7 @@ namespace sgn {
 		void Null();
 		void New(TypeIndex index);
 		void Delete();
+		void GCNull();
+		void GCNew(TypeIndex index);
 	};
 }

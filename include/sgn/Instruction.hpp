@@ -67,6 +67,8 @@ namespace sgn {
 		Null,
 		New,
 		Delete,
+		GCNull,
+		GCNew,
 	};
 }
 

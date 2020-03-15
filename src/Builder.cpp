@@ -138,4 +138,6 @@ void Builder:: opCode(indexType index) {									\
 	InstructionImpl(Null, ByteCodeVersion::v0_3_0);
 	InstructionWithOperandImpl(New, TypeIndex, ByteCodeVersion::v0_3_0);
 	InstructionImpl(Delete, ByteCodeVersion::v0_3_0);
+	InstructionImpl(GCNull, ByteCodeVersion::v0_3_0);
+	InstructionWithOperandImpl(GCNew, TypeIndex, ByteCodeVersion::v0_3_0);
 }
