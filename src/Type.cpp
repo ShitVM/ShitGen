@@ -19,10 +19,12 @@ namespace sgn {
 		static const Type s_LongType("long", 4);
 		static const Type s_DoubleType("double", 6);
 		static const Type s_PointerType("pointer", 7);
+		static const Type s_GCPointerType("gcpointer", 8);
 	}
 
 	const Type* IntType = &s_IntType;
 	const Type* LongType = &s_LongType;
 	const Type* DoubleType = &s_DoubleType;
 	const Type* PointerType = &s_PointerType;
+	const Type* GCPointerType = &s_GCPointerType;
 }

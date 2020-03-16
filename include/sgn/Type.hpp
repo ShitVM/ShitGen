@@ -25,4 +25,5 @@ namespace sgn {
 	extern const Type* LongType;
 	extern const Type* DoubleType;
 	extern const Type* PointerType;
+	extern const Type* GCPointerType;
 }
