@@ -96,5 +96,11 @@ namespace sgn {
 		void Delete();
 		void GCNull();
 		void GCNew(TypeIndex index);
+
+		void APush(ArrayIndex index);
+		void ANew(ArrayIndex index);
+		void AGCNew(ArrayIndex index);
+		void ALea();
+		void Count();
 	};
 }

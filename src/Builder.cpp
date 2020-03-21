@@ -140,4 +140,10 @@ void Builder:: opCode(indexType index) {									\
 	InstructionImpl(Delete, ByteCodeVersion::v0_3_0);
 	InstructionImpl(GCNull, ByteCodeVersion::v0_3_0);
 	InstructionWithOperandImpl(GCNew, TypeIndex, ByteCodeVersion::v0_3_0);
+
+	InstructionWithOperandImpl(APush, ArrayIndex, ByteCodeVersion::v0_3_0);
+	InstructionWithOperandImpl(ANew, ArrayIndex, ByteCodeVersion::v0_3_0);
+	InstructionWithOperandImpl(AGCNew, ArrayIndex, ByteCodeVersion::v0_3_0);
+	InstructionImpl(ALea, ByteCodeVersion::v0_3_0);
+	InstructionImpl(Count, ByteCodeVersion::v0_3_0);
 }

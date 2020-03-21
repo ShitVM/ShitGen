@@ -69,6 +69,12 @@ namespace sgn {
 		Delete,
 		GCNull,
 		GCNew,
+
+		APush,
+		ANew,
+		AGCNew,
+		ALea,
+		Count,
 	};
 }
 

@@ -48,14 +48,15 @@ namespace sgn {
 
 			switch (inst.Operand.index()) {
 			case 1: WriteConstant(stream, std::get<TypeIndex>(inst.Operand)); break;
-			case 2: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
-			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
-			case 4: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
-			case 5: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
-			case 6: WriteConstant(stream, std::get<FieldIndex>(inst.Operand)); break;
-			case 7: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
-			case 8: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
-			case 9: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
+			case 2: WriteConstant(stream, static_cast<std::uint32_t>(std::get<ArrayIndex>(inst.Operand)) | (1 << 31)); break;
+			case 3: WriteConstant(stream, constantPool.TransformRealIndex(std::get<IntConstantIndex>(inst.Operand))); break;
+			case 4: WriteConstant(stream, constantPool.TransformRealIndex(std::get<LongConstantIndex>(inst.Operand))); break;
+			case 5: WriteConstant(stream, constantPool.TransformRealIndex(std::get<DoubleConstantIndex>(inst.Operand))); break;
+			case 6: WriteConstant(stream, static_cast<std::uint32_t>(std::get<StructureIndex>(inst.Operand)) + constantPool.GetAllCount()); break;
+			case 7: WriteConstant(stream, std::get<FieldIndex>(inst.Operand)); break;
+			case 8: WriteConstant(stream, std::get<FunctionIndex>(inst.Operand)); break;
+			case 9: WriteConstant(stream, std::get<LabelIndex>(inst.Operand)); break;
+			case 10: WriteConstant(stream, std::get<LocalVariableIndex>(inst.Operand)); break;
 			}
 		}
 	}

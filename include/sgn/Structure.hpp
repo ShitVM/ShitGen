@@ -8,16 +8,25 @@
 #include <vector>
 
 namespace sgn {
+	struct Field final {
+		const sgn::Type* Type;
+		std::uint64_t Count = 0;
+
+		bool IsArray() const noexcept;
+	};
+}
+
+namespace sgn {
 	class Structure final {
 	public:
-		std::vector<const Type*> m_Fields;
+		std::vector<Field> m_Fields;
 		Type m_Type;
 
 	public:
 		Structure() noexcept = default;
-		explicit Structure(std::vector<const Type*> fields) noexcept;
+		explicit Structure(std::vector<Field> fields) noexcept;
 		explicit Structure(Type&& type) noexcept;
-		Structure(std::vector<const Type*> fields, Type&& type) noexcept;
+		Structure(std::vector<Field> fields, Type&& type) noexcept;
 		Structure(Structure&& structures) noexcept;
 		~Structure() = default;
 
@@ -32,6 +41,7 @@ namespace sgn {
 		std::uint32_t GetFieldCount() const noexcept;
 
 		FieldIndex AddField(const Type* type);
+		FieldIndex AddField(const Type* type, std::uint64_t count);
 		FieldIndex GetField(std::uint32_t index) const noexcept;
 
 		const Type* GetType() const noexcept;

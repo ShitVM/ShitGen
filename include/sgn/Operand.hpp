@@ -5,6 +5,7 @@
 
 namespace sgn {
 	enum class TypeIndex : std::uint32_t {};
+	enum class ArrayIndex : std::uint32_t {};
 	enum class IntConstantIndex : std::uint32_t {};
 	enum class LongConstantIndex : std::uint32_t {};
 	enum class DoubleConstantIndex : std::uint32_t {};
@@ -15,7 +16,7 @@ namespace sgn {
 	enum class LocalVariableIndex : std::uint32_t {};
 
 	using Operand = std::variant<std::monostate,
-		TypeIndex,
+		TypeIndex, ArrayIndex,
 		IntConstantIndex, LongConstantIndex, DoubleConstantIndex,
 		StructureIndex, FieldIndex,
 		FunctionIndex,

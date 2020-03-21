@@ -62,6 +62,15 @@ namespace sgn {
 	TypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
 		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + 10);
 	}
+	ArrayIndex ByteFile::MakeArray(const Type* type) const noexcept {
+		return MakeArray(GetTypeIndex(type));
+	}
+	ArrayIndex ByteFile::MakeArray(StructureIndex structure) const noexcept {
+		return MakeArray(GetTypeIndex(structure));
+	}
+	ArrayIndex ByteFile::MakeArray(TypeIndex type) const noexcept {
+		return static_cast<ArrayIndex>(type);
+	}
 
 	IntConstantIndex ByteFile::AddIntConstant(std::uint32_t value) {
 		if (const auto dis = m_ConstantPool.ContainsIntConstant(value); dis) {
@@ -147,6 +156,9 @@ namespace sgn {
 	void ByteFile::Save(const std::string& path) const {
 		std::ofstream stream(path, std::ofstream::binary);
 		if (!stream) throw std::runtime_error("Failed to open the file.");
+
+		if (m_ByteCodeVersion >= ByteCodeVersion::v0_3_0 &&
+			m_ByteFileVersion < ByteFileVersion::v0_3_0) throw std::runtime_error("Incompatible version");
 
 		// Header
 		static constexpr std::uint8_t magicNumber[] = { 0x74, 0x68, 0x74, 0x68 };

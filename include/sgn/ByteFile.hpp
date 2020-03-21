@@ -43,6 +43,9 @@ namespace sgn {
 
 		TypeIndex GetTypeIndex(const Type* type) const noexcept;
 		TypeIndex GetTypeIndex(StructureIndex structure) const noexcept;
+		ArrayIndex MakeArray(const Type* type) const noexcept;
+		ArrayIndex MakeArray(StructureIndex structure) const noexcept;
+		ArrayIndex MakeArray(TypeIndex type) const noexcept;
 
 		IntConstantIndex AddIntConstant(std::uint32_t value);
 		LongConstantIndex AddLongConstant(std::uint64_t value);
