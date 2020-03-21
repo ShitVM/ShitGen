@@ -69,6 +69,9 @@ namespace sgn {
 		return MakeArray(GetTypeIndex(structure));
 	}
 	ArrayIndex ByteFile::MakeArray(TypeIndex type) const noexcept {
+		if (m_ByteFileVersion < ByteFileVersion::v0_3_0 ||
+			m_ByteCodeVersion < ByteCodeVersion::v0_3_0) throw std::runtime_error("Incompatible feature");
+
 		return static_cast<ArrayIndex>(type);
 	}
 
@@ -98,7 +101,8 @@ namespace sgn {
 	}
 
 	StructureIndex ByteFile::AddStructure() {
-		if (m_ByteFileVersion < ByteFileVersion::v0_2_0) throw std::runtime_error("Incompatible feature");
+		if (m_ByteFileVersion < ByteFileVersion::v0_2_0 ||
+			m_ByteCodeVersion < ByteCodeVersion::v0_2_0) throw std::runtime_error("Incompatible feature");
 
 		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + 10);
 		const std::string name = "structure" + std::to_string(number - 10);
