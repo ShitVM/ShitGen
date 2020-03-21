@@ -62,13 +62,13 @@ namespace sgn {
 	TypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
 		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + 10);
 	}
-	ArrayIndex ByteFile::MakeArray(const Type* type) const noexcept {
+	ArrayIndex ByteFile::MakeArray(const Type* type) const {
 		return MakeArray(GetTypeIndex(type));
 	}
-	ArrayIndex ByteFile::MakeArray(StructureIndex structure) const noexcept {
+	ArrayIndex ByteFile::MakeArray(StructureIndex structure) const {
 		return MakeArray(GetTypeIndex(structure));
 	}
-	ArrayIndex ByteFile::MakeArray(TypeIndex type) const noexcept {
+	ArrayIndex ByteFile::MakeArray(TypeIndex type) const {
 		if (m_ByteFileVersion < ByteFileVersion::v0_3_0 ||
 			m_ByteCodeVersion < ByteCodeVersion::v0_3_0) throw std::runtime_error("Incompatible feature");
 
