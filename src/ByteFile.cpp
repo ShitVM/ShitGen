@@ -60,7 +60,7 @@ namespace sgn {
 		return static_cast<TypeIndex>(type->Code);
 	}
 	TypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
-		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + 10);
+		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + GetStructureIndexStart());
 	}
 	ArrayIndex ByteFile::MakeArray(const Type* type) const {
 		return MakeArray(GetTypeIndex(type));
@@ -104,8 +104,8 @@ namespace sgn {
 		if (m_ByteFileVersion < ByteFileVersion::v0_2_0 ||
 			m_ByteCodeVersion < ByteCodeVersion::v0_2_0) throw std::runtime_error("Incompatible feature");
 
-		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + 10);
-		const std::string name = "structure" + std::to_string(number - 10);
+		const std::uint32_t number = static_cast<std::uint32_t>(m_Structures.size() + GetStructureIndexStart());
+		const std::string name = "structure" + std::to_string(number - GetStructureIndexStart());
 
 		m_Structures.push_back(std::make_unique<Structure>(Type(name, number)));
 		return static_cast<StructureIndex>(m_Structures.size() - 1);
@@ -113,12 +113,12 @@ namespace sgn {
 	const Structure* ByteFile::GetStructure(TypeIndex index) const noexcept {
 		assert(static_cast<std::uint32_t>(index) >= 10);
 
-		return m_Structures[static_cast<std::uint32_t>(index) - 10].get();
+		return m_Structures[static_cast<std::uint32_t>(index) - GetStructureIndexStart()].get();
 	}
 	Structure* ByteFile::GetStructure(TypeIndex index) noexcept {
 		assert(static_cast<std::uint32_t>(index) >= 10);
 
-		return m_Structures[static_cast<std::uint32_t>(index) - 10].get();
+		return m_Structures[static_cast<std::uint32_t>(index) - GetStructureIndexStart()].get();
 	}
 	const Structure* ByteFile::GetStructure(StructureIndex index) const noexcept {
 		return m_Structures[static_cast<std::size_t>(index)].get();
@@ -161,7 +161,9 @@ namespace sgn {
 		std::ofstream stream(path, std::ofstream::binary);
 		if (!stream) throw std::runtime_error("Failed to open the file.");
 
-		if (m_ByteCodeVersion >= ByteCodeVersion::v0_3_0 &&
+		if (m_ByteCodeVersion >= ByteCodeVersion::v0_4_0 &&
+			m_ByteFileVersion < ByteFileVersion::v0_4_0 ||
+			m_ByteCodeVersion >= ByteCodeVersion::v0_3_0 &&
 			m_ByteFileVersion < ByteFileVersion::v0_3_0) throw std::runtime_error("Incompatible version");
 
 		// Header
@@ -190,5 +192,10 @@ namespace sgn {
 
 		// Entry Point
 		m_EntryPoint.Save(stream, m_ByteCodeVersion, m_ConstantPool);
+	}
+
+	std::uint32_t ByteFile::GetStructureIndexStart() const noexcept {
+		if (m_ByteCodeVersion >= ByteCodeVersion::v0_4_0) return 20;
+		else return 10;
 	}
 }

@@ -71,5 +71,8 @@ namespace sgn {
 		Instructions* GetEntryPoint() noexcept;
 
 		void Save(const std::string& path) const;
+
+	private:
+		std::uint32_t GetStructureIndexStart() const noexcept;
 	};
 }
