@@ -1,6 +1,5 @@
 #include <sgn/Generator.hpp>
 
-#include <cstdint>
 #include <stdexcept>
 
 namespace sgn {
@@ -109,8 +108,20 @@ namespace sgn {
 
 			Write(inst.OpCode);
 			if (inst.HasOperand()) {
-				Write(inst.Operand);
+				Write(ConvertOperand(inst.Operand, inst.OperandIndex));
 			}
+		}
+	}
+
+	std::uint32_t Generator::ConvertOperand(std::uint32_t operand, std::uint8_t operandIndex) noexcept {
+		switch (operandIndex) {
+		/*ArrayIndex*/			case 2: return operand | (1 << 31);
+		/*IntConstantIndex*/	case 3: return m_ByteFile.TransformConstantIndex(static_cast<IntConstantIndex>(operand));
+		/*LongConstantIndex*/	case 4: return m_ByteFile.TransformConstantIndex(static_cast<LongConstantIndex>(operand));
+		/*DoubleConstantIndex*/ case 5: return m_ByteFile.TransformConstantIndex(static_cast<DoubleConstantIndex>(operand));
+		/*StructureIndex*/		case 6: return m_ByteFile.TransformConstantIndex(static_cast<StructureIndex>(operand));
+
+		default: return operand;
 		}
 	}
 }

@@ -104,17 +104,5 @@ namespace sgn {
 		void AGCNew(ArrayIndex index);
 		void ALea();
 		void Count();
-
-	private:
-		std::uint32_t ConvertOperand(TypeIndex index) noexcept;
-		std::uint32_t ConvertOperand(ArrayIndex index) noexcept;
-		std::uint32_t ConvertOperand(IntConstantIndex index) noexcept;
-		std::uint32_t ConvertOperand(LongConstantIndex index) noexcept;
-		std::uint32_t ConvertOperand(DoubleConstantIndex index) noexcept;
-		std::uint32_t ConvertOperand(StructureIndex index) noexcept;
-		std::uint32_t ConvertOperand(FieldIndex index) noexcept;
-		std::uint32_t ConvertOperand(FunctionIndex index) noexcept;
-		std::uint32_t ConvertOperand(LabelIndex index) noexcept;
-		std::uint32_t ConvertOperand(LocalVariableIndex index) noexcept;
 	};
 }

@@ -8,6 +8,7 @@
 #include <svm/core/ConstantPool.hpp>
 #include <svm/core/Parser.hpp>
 
+#include <cstdint>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -40,6 +41,8 @@ namespace sgn {
 		void Generate(const Functions& functions);
 		void Generate(const svm::Mappings& mappings);
 		void Generate(const Instructions& instructions);
+
+		std::uint32_t ConvertOperand(std::uint32_t operand, std::uint8_t operandIndex) noexcept;
 	};
 }
 

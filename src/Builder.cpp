@@ -78,7 +78,8 @@ void Builder:: opCode(indexType index) {													\
 	if (m_ByteFile->GetShitBCVersion() < version) {											\
 		throw std::runtime_error("Incompatible instruction");								\
 	}																						\
-	m_Instructions->AddInstruction(Instruction(OpCode:: opCode, ConvertOperand(index)));	\
+	m_Instructions->AddInstruction(Instruction(OpCode:: opCode,								\
+		static_cast<std::uint32_t>(index), GetOperandIndex<indexType>()));					\
 }
 
 	InstructionImpl(Nop, ShitBCVersion::v0_1_0);
@@ -146,35 +147,4 @@ void Builder:: opCode(indexType index) {													\
 	InstructionWithOperandImpl(AGCNew, ArrayIndex, ShitBCVersion::v0_3_0);
 	InstructionImpl(ALea, ShitBCVersion::v0_3_0);
 	InstructionImpl(Count, ShitBCVersion::v0_3_0);
-
-	std::uint32_t Builder::ConvertOperand(TypeIndex index) noexcept {
-		return static_cast<std::uint32_t>(index);
-	}
-	std::uint32_t Builder::ConvertOperand(ArrayIndex index) noexcept {
-		return static_cast<std::uint32_t>(index) | (1 << 31);
-	}
-	std::uint32_t Builder::ConvertOperand(IntConstantIndex index) noexcept {
-		return m_ByteFile->TransformConstantIndex(index);
-	}
-	std::uint32_t Builder::ConvertOperand(LongConstantIndex index) noexcept {
-		return m_ByteFile->TransformConstantIndex(index);
-	}
-	std::uint32_t Builder::ConvertOperand(DoubleConstantIndex index) noexcept {
-		return m_ByteFile->TransformConstantIndex(index);
-	}
-	std::uint32_t Builder::ConvertOperand(StructureIndex index) noexcept {
-		return m_ByteFile->TransformConstantIndex(index);
-	}
-	std::uint32_t Builder::ConvertOperand(FieldIndex index) noexcept {
-		return static_cast<std::uint32_t>(index);
-	}
-	std::uint32_t Builder::ConvertOperand(FunctionIndex index) noexcept {
-		return static_cast<std::uint32_t>(index);
-	}
-	std::uint32_t Builder::ConvertOperand(LabelIndex index) noexcept {
-		return static_cast<std::uint32_t>(index);
-	}
-	std::uint32_t Builder::ConvertOperand(LocalVariableIndex index) noexcept {
-		return static_cast<std::uint32_t>(index);
-	}
 }
