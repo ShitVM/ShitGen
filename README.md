@@ -3,9 +3,9 @@ ShitVM 바이트 파일 생성기
 
 ## 컴파일
 ```
-$ git clone https://github.com/ShitVM/ShitGen.git
+$ git clone https://github.com/ShitVM/ShitGen.git --recurse-submodules
 $ cd ShitGen
-$ cmake CMakeLists.txt
+$ cmake .
 $ make
 ```
 
@@ -14,44 +14,46 @@ $ make
 ```cpp
 #include <sgn/ByteFile.hpp>
 #include <sgn/Builder.hpp>
+#include <sgn/Generator.hpp>
 
 using namespace sgn;
 
 int main() {
 	ByteFile file;
 
-	const auto fiboFunc = file.AddFunction(1, true);
-	Builder fb(file, fiboFunc);
+	FunctionIndex fiboFunc = file.AddFunction(1, true);
+	Builder fiboBuilder(file, fiboFunc);
 
-	const auto int2 = file.AddIntConstantFast(2);
-	const auto int1 = file.AddIntConstantFast(1);
+	IntConstantIndex int1 = file.AddIntConstantFast(1);
+	IntConstantIndex int2 = file.AddIntConstantFast(2);
 
-	fb.Load(fb.GetArgument(0));
-	fb.Push(int2);
-	fb.Cmp();
-	fb.Jae(fb.ReserveLabel("calc"));
-	fb.Pop();
-	fb.Load(fb.GetArgument(0));
-	fb.Ret();
-	fb.AddLabel("calc");
-	fb.Load(fb.GetArgument(0));
-	fb.Push(int1);
-	fb.Sub();
-	fb.Call(fiboFunc);
-	fb.Load(fb.GetArgument(0));
-	fb.Push(int2);
-	fb.Sub();
-	fb.Call(fiboFunc);
-	fb.Add();
-	fb.Ret();
+	fiboBuilder.Load(fiboBuilder.GetArgument(0));
+	fiboBuilder.Push(int2);
+	fiboBuilder.Cmp();
+	fiboBuilder.Jae(fiboBuilder.ReserveLabel("calc"));
+	fiboBuilder.Pop();
+	fiboBuilder.Load(fiboBuilder.GetArgument(0));
+	fiboBuilder.Ret();
+	fiboBuilder.AddLabel("calc");
+	fiboBuilder.Load(fiboBuilder.GetArgument(0));
+	fiboBuilder.Push(int1);
+	fiboBuilder.Sub();
+	fiboBuilder.Call(fiboFunc);
+	fiboBuilder.Load(fiboBuilder.GetArgument(0));
+	fiboBuilder.Push(int2);
+	fiboBuilder.Sub();
+	fiboBuilder.Call(fiboFunc);
+	fiboBuilder.Add();
+	fiboBuilder.Ret();
 
-	Builder eb(file, file.GetEntryPoint());
+	Builder entryBuilder(file, file.GetEntrypoint());
 
-	const auto int35 = file.AddIntConstantFast(35);
+	IntConstantIndex int35 = file.AddIntConstantFast(35);
 
-	eb.Push(int35);
-	eb.Call(fiboFunc);
+	entryBuilder.Push(int35);
+	entryBuilder.Call(fiboFunc);
 
-	file.Save("./test.sbf");
+	Generator gen(file);
+	gen.Generate("Fibonacci.sbf");
 }
 ```
