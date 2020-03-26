@@ -7,6 +7,10 @@ namespace sgn {
 	class ConstantPool final : public svm::core::ConstantPool {
 	public:
 		using svm::core::ConstantPool::ConstantPool;
+		inline ConstantPool(ConstantPool&& constantPool) noexcept;
+
+	public:
+		inline ConstantPool& operator=(ConstantPool&& constantPool) noexcept;
 
 	private:
 		using svm::core::ConstantPool::GetConstant;

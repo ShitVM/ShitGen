@@ -16,6 +16,10 @@ namespace sgn {
 		class ByteFileAdapter : public svm::core::ByteFile {
 		public:
 			using svm::core::ByteFile::ByteFile;
+			inline ByteFileAdapter(ByteFileAdapter&& byteFile) noexcept;
+			
+		public:
+			inline ByteFileAdapter& operator=(ByteFileAdapter&& byteFile) noexcept;
 
 		protected:
 			inline const Instructions* GetEntrypointInternal() const noexcept;

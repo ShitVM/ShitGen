@@ -2,9 +2,18 @@
 #include <sgn/ByteFile.hpp>
 
 #include <cassert>
+#include <utility>
 
 namespace sgn {
 	namespace detail {
+		inline ByteFileAdapter::ByteFileAdapter(ByteFileAdapter&& byteFile) noexcept
+			: svm::core::ByteFile(std::move(byteFile)) {}
+
+		inline ByteFileAdapter& ByteFileAdapter::operator=(ByteFileAdapter&& byteFile) noexcept {
+			svm::core::ByteFile::operator=(std::move(byteFile));
+			return *this;
+		}
+
 		inline const Instructions* ByteFileAdapter::GetEntrypointInternal() const noexcept {
 			return &GetEntrypoint();
 		}

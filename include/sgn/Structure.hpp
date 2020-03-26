@@ -14,6 +14,10 @@ namespace sgn {
 	class StructureInfo final : public svm::StructureInfo {
 	public:
 		using svm::StructureInfo::StructureInfo;
+		inline StructureInfo(StructureInfo&& structureInfo) noexcept;
+
+	public:
+		inline StructureInfo& operator=(StructureInfo&& structureInfo) noexcept;
 
 	public:
 		inline FieldIndex AddField(sgn::Type type);

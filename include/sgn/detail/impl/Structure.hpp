@@ -2,6 +2,14 @@
 #include <sgn/Structure.hpp>
 
 namespace sgn {
+	inline StructureInfo::StructureInfo(StructureInfo&& structureInfo) noexcept
+		: svm::StructureInfo(std::move(structureInfo)) {}
+
+	inline StructureInfo& StructureInfo::operator=(StructureInfo&& structureInfo) noexcept {
+		svm::StructureInfo::operator=(std::move(structureInfo));
+		return *this;
+	}
+
 	inline FieldIndex StructureInfo::AddField(sgn::Type type) {
 		Fields.push_back(Field{ 0, type });
 		return static_cast<FieldIndex>(Fields.size() - 1);
