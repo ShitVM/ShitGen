@@ -109,18 +109,18 @@ namespace sgn {
 	inline const StructureInfo* ByteFile::GetStructureInfo(TypeIndex index) const noexcept {
 		assert(static_cast<std::uint32_t>(index) >= static_cast<std::uint32_t>(TypeCode::Structure));
 
-		return &GetStructures()[static_cast<std::uint32_t>(index) - static_cast<std::uint32_t>(TypeCode::Structure)];
+		return static_cast<const StructureInfo*>(&GetStructures()[static_cast<std::uint32_t>(index) - static_cast<std::uint32_t>(TypeCode::Structure)]);
 	}
 	inline const StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) const noexcept {
-		return &GetStructures()[static_cast<std::uint32_t>(index)];
+		return static_cast<const StructureInfo*>(&GetStructures()[static_cast<std::uint32_t>(index)]);
 	}
 	inline StructureInfo* ByteFile::GetStructureInfo(TypeIndex index) noexcept {
 		assert(static_cast<std::uint32_t>(index) >= static_cast<std::uint32_t>(TypeCode::Structure));
 
-		return &GetStructures()[static_cast<std::uint32_t>(index) - static_cast<std::uint32_t>(TypeCode::Structure)];
+		return static_cast<StructureInfo*>(&GetStructures()[static_cast<std::uint32_t>(index) - static_cast<std::uint32_t>(TypeCode::Structure)]);
 	}
 	inline StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) noexcept {
-		return &GetStructures()[static_cast<std::uint32_t>(index)];
+		return static_cast<StructureInfo*>(&GetStructures()[static_cast<std::uint32_t>(index)]);
 	}
 
 	inline FunctionIndex ByteFile::AddFunction() {
