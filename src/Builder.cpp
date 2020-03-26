@@ -9,9 +9,9 @@
 namespace sgn {
 	Builder::Builder(ByteFile& file, FunctionIndex index)
 		: m_ByteFile(&file) {
-		m_Instructions = &file.GetFunction(index)->Instructions();
-		m_Function = file.GetFunction(index);
-		m_LocalVariableIndex = m_Function->GetArity();
+		m_Function = *file.GetFunctionInfo(index);
+		m_Instructions = &file.GetFunctionInfo(index)->Instructions;
+		m_LocalVariableIndex = m_Function->Arity;
 
 		file.CreatedBuilder();
 	}
@@ -41,7 +41,7 @@ namespace sgn {
 
 	LocalVariableIndex Builder::GetArgument(std::uint32_t index) const noexcept {
 		assert(m_Function != nullptr);
-		assert(index < m_Function->GetArity());
+		assert(index < m_Function->Arity);
 		return static_cast<LocalVariableIndex>(index);
 	}
 	LocalVariableIndex Builder::AddLocalVariable() {
@@ -68,82 +68,113 @@ namespace sgn {
 
 #define InstructionImpl(opCode, version)							\
 void Builder:: opCode() {											\
-	if (m_ByteFile->GetByteCodeVersion() < version) {				\
+	if (m_ByteFile->GetShitBCVersion() < version) {					\
 		throw std::runtime_error("Incompatible instruction");		\
 	}																\
 	m_Instructions->AddInstruction(Instruction(OpCode:: opCode));	\
 }
-#define InstructionWithOperandImpl(opCode, indexType, version)				\
-void Builder:: opCode(indexType index) {									\
-	if (m_ByteFile->GetByteCodeVersion() < version) {						\
-		throw std::runtime_error("Incompatible instruction");				\
-	}																		\
-	m_Instructions->AddInstruction(Instruction(OpCode:: opCode, index));	\
+#define InstructionWithOperandImpl(opCode, indexType, version)								\
+void Builder:: opCode(indexType index) {													\
+	if (m_ByteFile->GetShitBCVersion() < version) {											\
+		throw std::runtime_error("Incompatible instruction");								\
+	}																						\
+	m_Instructions->AddInstruction(Instruction(OpCode:: opCode, ConvertOperand(index)));	\
 }
 
-	InstructionImpl(Nop, ByteCodeVersion::v0_1_0);
+	InstructionImpl(Nop, ShitBCVersion::v0_1_0);
 
-	InstructionWithOperandImpl(Push, IntConstantIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Push, LongConstantIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Push, DoubleConstantIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Push, StructureIndex, ByteCodeVersion::v0_2_0);
-	InstructionImpl(Pop, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Load, LocalVariableIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Store, LocalVariableIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Lea, LocalVariableIndex, ByteCodeVersion::v0_2_0);
-	InstructionWithOperandImpl(FLea, FieldIndex, ByteCodeVersion::v0_2_0);
-	InstructionImpl(TLoad, ByteCodeVersion::v0_2_0);
-	InstructionImpl(TStore, ByteCodeVersion::v0_2_0);
-	InstructionImpl(Copy, ByteCodeVersion::v0_2_0);
-	InstructionImpl(Swap, ByteCodeVersion::v0_2_0);
+	InstructionWithOperandImpl(Push, IntConstantIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Push, LongConstantIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Push, DoubleConstantIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Push, StructureIndex, ShitBCVersion::v0_2_0);
+	InstructionImpl(Pop, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Load, LocalVariableIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Store, LocalVariableIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Lea, LocalVariableIndex, ShitBCVersion::v0_2_0);
+	InstructionWithOperandImpl(FLea, FieldIndex, ShitBCVersion::v0_2_0);
+	InstructionImpl(TLoad, ShitBCVersion::v0_2_0);
+	InstructionImpl(TStore, ShitBCVersion::v0_2_0);
+	InstructionImpl(Copy, ShitBCVersion::v0_2_0);
+	InstructionImpl(Swap, ShitBCVersion::v0_2_0);
 
-	InstructionImpl(Add, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Sub, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Mul, ByteCodeVersion::v0_1_0);
-	InstructionImpl(IMul, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Div, ByteCodeVersion::v0_1_0);
-	InstructionImpl(IDiv, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Mod, ByteCodeVersion::v0_1_0);
-	InstructionImpl(IMod, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Neg, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Inc, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Dec, ByteCodeVersion::v0_1_0);
+	InstructionImpl(Add, ShitBCVersion::v0_1_0);
+	InstructionImpl(Sub, ShitBCVersion::v0_1_0);
+	InstructionImpl(Mul, ShitBCVersion::v0_1_0);
+	InstructionImpl(IMul, ShitBCVersion::v0_1_0);
+	InstructionImpl(Div, ShitBCVersion::v0_1_0);
+	InstructionImpl(IDiv, ShitBCVersion::v0_1_0);
+	InstructionImpl(Mod, ShitBCVersion::v0_1_0);
+	InstructionImpl(IMod, ShitBCVersion::v0_1_0);
+	InstructionImpl(Neg, ShitBCVersion::v0_1_0);
+	InstructionImpl(Inc, ShitBCVersion::v0_1_0);
+	InstructionImpl(Dec, ShitBCVersion::v0_1_0);
 
-	InstructionImpl(And, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Or, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Xor, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Not, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Shl, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Sal, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Shr, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Sar, ByteCodeVersion::v0_1_0);
+	InstructionImpl(And, ShitBCVersion::v0_1_0);
+	InstructionImpl(Or, ShitBCVersion::v0_1_0);
+	InstructionImpl(Xor, ShitBCVersion::v0_1_0);
+	InstructionImpl(Not, ShitBCVersion::v0_1_0);
+	InstructionImpl(Shl, ShitBCVersion::v0_1_0);
+	InstructionImpl(Sal, ShitBCVersion::v0_1_0);
+	InstructionImpl(Shr, ShitBCVersion::v0_1_0);
+	InstructionImpl(Sar, ShitBCVersion::v0_1_0);
 
-	InstructionImpl(Cmp, ByteCodeVersion::v0_1_0);
-	InstructionImpl(ICmp, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Jmp, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Je, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Jne, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Ja, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Jae, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Jb, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Jbe, LabelIndex, ByteCodeVersion::v0_1_0);
-	InstructionWithOperandImpl(Call, FunctionIndex, ByteCodeVersion::v0_1_0);
-	InstructionImpl(Ret, ByteCodeVersion::v0_1_0);
+	InstructionImpl(Cmp, ShitBCVersion::v0_1_0);
+	InstructionImpl(ICmp, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Jmp, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Je, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Jne, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Ja, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Jae, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Jb, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Jbe, LabelIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Call, FunctionIndex, ShitBCVersion::v0_1_0);
+	InstructionImpl(Ret, ShitBCVersion::v0_1_0);
 
-	InstructionImpl(ToI, ByteCodeVersion::v0_1_0);
-	InstructionImpl(ToL, ByteCodeVersion::v0_1_0);
-	InstructionImpl(ToD, ByteCodeVersion::v0_1_0);
-	InstructionImpl(ToP, ByteCodeVersion::v0_2_0);
+	InstructionImpl(ToI, ShitBCVersion::v0_1_0);
+	InstructionImpl(ToL, ShitBCVersion::v0_1_0);
+	InstructionImpl(ToD, ShitBCVersion::v0_1_0);
+	InstructionImpl(ToP, ShitBCVersion::v0_2_0);
 
-	InstructionImpl(Null, ByteCodeVersion::v0_3_0);
-	InstructionWithOperandImpl(New, TypeIndex, ByteCodeVersion::v0_3_0);
-	InstructionImpl(Delete, ByteCodeVersion::v0_3_0);
-	InstructionImpl(GCNull, ByteCodeVersion::v0_3_0);
-	InstructionWithOperandImpl(GCNew, TypeIndex, ByteCodeVersion::v0_3_0);
+	InstructionImpl(Null, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(New, TypeIndex, ShitBCVersion::v0_3_0);
+	InstructionImpl(Delete, ShitBCVersion::v0_3_0);
+	InstructionImpl(GCNull, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(GCNew, TypeIndex, ShitBCVersion::v0_3_0);
 
-	InstructionWithOperandImpl(APush, ArrayIndex, ByteCodeVersion::v0_3_0);
-	InstructionWithOperandImpl(ANew, ArrayIndex, ByteCodeVersion::v0_3_0);
-	InstructionWithOperandImpl(AGCNew, ArrayIndex, ByteCodeVersion::v0_3_0);
-	InstructionImpl(ALea, ByteCodeVersion::v0_3_0);
-	InstructionImpl(Count, ByteCodeVersion::v0_3_0);
+	InstructionWithOperandImpl(APush, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(ANew, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(AGCNew, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionImpl(ALea, ShitBCVersion::v0_3_0);
+	InstructionImpl(Count, ShitBCVersion::v0_3_0);
+
+	std::uint32_t Builder::ConvertOperand(TypeIndex index) noexcept {
+		return static_cast<std::uint32_t>(index);
+	}
+	std::uint32_t Builder::ConvertOperand(ArrayIndex index) noexcept {
+		return static_cast<std::uint32_t>(index) | (1 << 31);
+	}
+	std::uint32_t Builder::ConvertOperand(IntConstantIndex index) noexcept {
+		return m_ByteFile->TransformConstantIndex(index);
+	}
+	std::uint32_t Builder::ConvertOperand(LongConstantIndex index) noexcept {
+		return m_ByteFile->TransformConstantIndex(index);
+	}
+	std::uint32_t Builder::ConvertOperand(DoubleConstantIndex index) noexcept {
+		return m_ByteFile->TransformConstantIndex(index);
+	}
+	std::uint32_t Builder::ConvertOperand(StructureIndex index) noexcept {
+		return m_ByteFile->TransformConstantIndex(index);
+	}
+	std::uint32_t Builder::ConvertOperand(FieldIndex index) noexcept {
+		return static_cast<std::uint32_t>(index);
+	}
+	std::uint32_t Builder::ConvertOperand(FunctionIndex index) noexcept {
+		return static_cast<std::uint32_t>(index);
+	}
+	std::uint32_t Builder::ConvertOperand(LabelIndex index) noexcept {
+		return static_cast<std::uint32_t>(index);
+	}
+	std::uint32_t Builder::ConvertOperand(LocalVariableIndex index) noexcept {
+		return static_cast<std::uint32_t>(index);
+	}
 }
