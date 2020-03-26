@@ -11,5 +11,6 @@ namespace sgn {
 	using svm::IntType;
 	using svm::LongType;
 	using svm::DoubleType;
+	using svm::PointerType;
 	using svm::GCPointerType;
 }
