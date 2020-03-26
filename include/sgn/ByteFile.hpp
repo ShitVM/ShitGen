@@ -26,7 +26,12 @@ namespace sgn {
 			using svm::core::ByteFile::SetEntrypoint;
 		};
 	}
+
+	class Generator;
+
 	class ByteFile final : public detail::ByteFileAdapter {
+		friend class Generator;
+
 	private:
 		ShitBFVersion m_ShitBFVersion = ShitBFVersion::Latest;
 		ShitBCVersion m_ShitBCVersion = ShitBCVersion::Latest;
@@ -45,6 +50,8 @@ namespace sgn {
 	private:
 		using svm::core::ByteFile::GetPath;
 		using svm::core::ByteFile::SetPath;
+		using svm::core::ByteFile::GetDependencies;
+		using svm::core::ByteFile::SetDependencies;
 		using svm::core::ByteFile::GetConstantPool;
 		using svm::core::ByteFile::SetConstantPool;
 		using svm::core::ByteFile::GetStructures;
