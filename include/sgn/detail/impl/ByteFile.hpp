@@ -30,12 +30,17 @@ namespace sgn {
 		return m_ShitBFVersion;
 	}
 	inline void ByteFile::SetShitBFVersion(ShitBFVersion version) noexcept {
+		assert(version >= ShitBFVersion::Least);
+
 		m_ShitBFVersion = version;
 	}
 	inline ShitBCVersion ByteFile::GetShitBCVersion() const noexcept {
 		return m_ShitBCVersion;
 	}
 	inline void ByteFile::SetShitBCVersion(ShitBCVersion version) noexcept {
+		assert(!m_HasBuilder);
+		assert(version >= ShitBCVersion::Least);
+
 		m_ShitBCVersion = version;
 	}
 
