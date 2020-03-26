@@ -29,6 +29,7 @@ namespace sgn {
 		Generate(m_ByteFile.GetConstantPool());
 		Generate(m_ByteFile.GetStructures());
 		Generate(m_ByteFile.GetFunctions());
+		Generate(m_ByteFile.GetMappings());
 		Generate(*m_ByteFile.GetEntrypointInternal());
 	}
 
@@ -75,6 +76,25 @@ namespace sgn {
 			Write(func.Arity);
 			Write(func.HasResult);
 			Generate(func.Instructions);
+		}
+	}
+	void Generator::Generate(const svm::Mappings& mappings) {
+		const std::uint32_t structMappingCount = mappings.GetStructureMappingCount();
+		Write(structMappingCount);
+		for (std::uint32_t i = 0; i < structMappingCount; ++i) {
+			const auto& mapping = mappings.GetStructureMapping(i);
+
+			Write(mapping.Module);
+			Write(mapping.Index);
+		}
+
+		const std::uint32_t funcMappingCount = mappings.GetFunctionMappingCount();
+		Write(funcMappingCount);
+		for (std::uint32_t i = 0; i < funcMappingCount; ++i) {
+			const auto& mapping = mappings.GetFunctionMapping(i);
+
+			Write(mapping.Module);
+			Write(mapping.Index);
 		}
 	}
 	void Generator::Generate(const Instructions& instructions) {

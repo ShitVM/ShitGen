@@ -6,9 +6,11 @@
 #include <sgn/Instruction.hpp>
 #include <sgn/Structure.hpp>
 #include <svm/core/ConstantPool.hpp>
+#include <svm/core/Parser.hpp>
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 namespace sgn {
 	class Generator final {
@@ -36,6 +38,7 @@ namespace sgn {
 		void Generate(const svm::core::ConstantPool& constantPool);
 		void Generate(const Structures& structures);
 		void Generate(const Functions& functions);
+		void Generate(const svm::Mappings& mappings);
 		void Generate(const Instructions& instructions);
 	};
 }
