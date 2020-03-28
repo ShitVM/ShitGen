@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <fstream>
 #include <string>
-#include <vector>
 
 namespace sgn {
 	class Generator final {

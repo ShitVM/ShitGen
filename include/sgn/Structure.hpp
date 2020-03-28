@@ -14,16 +14,14 @@ namespace sgn {
 	class StructureInfo final : public svm::StructureInfo {
 	public:
 		using svm::StructureInfo::StructureInfo;
-		inline StructureInfo(StructureInfo&& structureInfo) noexcept;
+		StructureInfo(StructureInfo&& structureInfo) noexcept;
 
 	public:
-		inline StructureInfo& operator=(StructureInfo&& structureInfo) noexcept;
+		StructureInfo& operator=(StructureInfo&& structureInfo) noexcept;
 
 	public:
-		inline FieldIndex AddField(sgn::Type type);
-		inline FieldIndex AddField(sgn::Type type, std::uint64_t count);
-		inline FieldIndex GetField(std::uint32_t index) const noexcept;
+		FieldIndex AddField(sgn::Type type);
+		FieldIndex AddField(sgn::Type type, std::uint64_t count);
+		FieldIndex GetField(std::uint32_t index) const noexcept;
 	};
 }
-
-#include "detail/impl/Structure.hpp"
