@@ -45,6 +45,7 @@ namespace sgn {
 		void Push(LongConstantIndex index);
 		void Push(DoubleConstantIndex index);
 		void Push(StructureIndex index);
+		void Push(MappedStructureIndex index);
 		void Pop();
 		void Load(LocalVariableIndex index);
 		void Store(LocalVariableIndex index);
@@ -96,13 +97,18 @@ namespace sgn {
 
 		void Null();
 		void New(TypeIndex index);
+		void New(MappedTypeIndex index);
 		void Delete();
 		void GCNull();
 		void GCNew(TypeIndex index);
+		void GCNew(MappedTypeIndex index);
 
 		void APush(ArrayIndex index);
+		void APush(MappedArrayIndex index);
 		void ANew(ArrayIndex index);
+		void ANew(MappedArrayIndex index);
 		void AGCNew(ArrayIndex index);
+		void AGCNew(MappedArrayIndex index);
 		void ALea();
 		void Count();
 	};

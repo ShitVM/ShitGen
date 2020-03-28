@@ -115,11 +115,14 @@ namespace sgn {
 
 	std::uint32_t Generator::ConvertOperand(std::uint32_t operand, std::uint8_t operandIndex) noexcept {
 		switch (operandIndex) {
+		case OperandIndex<MappedTypeIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedTypeIndex>(operand));
 		case OperandIndex<ArrayIndex>: return operand | (1 << 31);
+		case OperandIndex<MappedArrayIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedTypeIndex>(operand)) | (1 << 31);
 		case OperandIndex<IntConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<IntConstantIndex>(operand));
 		case OperandIndex<LongConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<LongConstantIndex>(operand));
 		case OperandIndex<DoubleConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<DoubleConstantIndex>(operand));
 		case OperandIndex<StructureIndex>: return m_ByteFile.TransformConstantIndex(static_cast<StructureIndex>(operand));
+		case OperandIndex<MappedStructureIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedStructureIndex>(operand));
 		case OperandIndex<MappedFunctionIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedFunctionIndex>(operand));
 
 		default: return operand;

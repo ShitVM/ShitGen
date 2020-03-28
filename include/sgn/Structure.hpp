@@ -7,7 +7,16 @@
 #include <cstdint>
 
 namespace sgn {
-	using svm::Field;
+	struct Field {
+		sgn::Type Type;
+		std::uint64_t Count = 0;
+
+		Field(sgn::Type type) noexcept;
+		Field(sgn::Type type, std::uint64_t count) noexcept;
+	};
+}
+
+namespace sgn {
 	using svm::Structure;
 	using svm::Structures;
 
@@ -20,6 +29,7 @@ namespace sgn {
 		StructureInfo& operator=(StructureInfo&& structureInfo) noexcept;
 
 	public:
+		FieldIndex AddField(const Field& field);
 		FieldIndex AddField(sgn::Type type);
 		FieldIndex AddField(sgn::Type type, std::uint64_t count);
 		FieldIndex GetField(std::uint32_t index) const noexcept;

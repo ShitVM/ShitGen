@@ -11,6 +11,16 @@ namespace sgn {
 		return *this;
 	}
 
+	ExternStructureIndex VirtualModule::AddStructure(const std::vector<Field>& fields) {
+		auto& structures = GetStructures();
+		StructureInfo& structure = static_cast<StructureInfo&>(structures.emplace_back());
+
+		for (const auto& field : fields) {
+			structure.AddField(field);
+		}
+
+		return static_cast<ExternStructureIndex>(structures.size() - 1);
+	}
 	ExternFunctionIndex VirtualModule::AddFunction(std::uint16_t arity, bool hasResult) {
 		auto& functions = GetFunctions();
 		functions.emplace_back(arity, hasResult);

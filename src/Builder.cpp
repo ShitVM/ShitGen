@@ -88,6 +88,7 @@ void Builder:: opCode(indexType index) {								\
 	InstructionWithOperandImpl(Push, LongConstantIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, DoubleConstantIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, StructureIndex, ShitBCVersion::v0_2_0);
+	InstructionWithOperandImpl(Push, MappedStructureIndex, ShitBCVersion::v0_4_0);
 	InstructionImpl(Pop, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Load, LocalVariableIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Store, LocalVariableIndex, ShitBCVersion::v0_1_0);
@@ -139,13 +140,18 @@ void Builder:: opCode(indexType index) {								\
 
 	InstructionImpl(Null, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(New, TypeIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(New, MappedTypeIndex, ShitBCVersion::v0_4_0);
 	InstructionImpl(Delete, ShitBCVersion::v0_3_0);
 	InstructionImpl(GCNull, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(GCNew, TypeIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(GCNew, MappedTypeIndex, ShitBCVersion::v0_4_0);
 
 	InstructionWithOperandImpl(APush, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(APush, MappedArrayIndex, ShitBCVersion::v0_4_0);
 	InstructionWithOperandImpl(ANew, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(ANew, MappedArrayIndex, ShitBCVersion::v0_4_0);
 	InstructionWithOperandImpl(AGCNew, ArrayIndex, ShitBCVersion::v0_3_0);
+	InstructionWithOperandImpl(AGCNew, MappedArrayIndex, ShitBCVersion::v0_4_0);
 	InstructionImpl(ALea, ShitBCVersion::v0_3_0);
 	InstructionImpl(Count, ShitBCVersion::v0_3_0);
 }

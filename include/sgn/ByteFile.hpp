@@ -81,14 +81,19 @@ namespace sgn {
 
 		TypeIndex GetTypeIndex(Type type) const noexcept;
 		TypeIndex GetTypeIndex(StructureIndex structure) const noexcept;
+		MappedTypeIndex GetTypeIndex(MappedStructureIndex structure) const noexcept;
 		ArrayIndex MakeArray(Type type) const;
 		ArrayIndex MakeArray(StructureIndex structure) const;
 		ArrayIndex MakeArray(TypeIndex type) const;
+		MappedArrayIndex MakeArray(MappedStructureIndex structure) const;
+		MappedArrayIndex MakeArray(MappedTypeIndex type) const;
 
 		std::uint32_t TransformConstantIndex(IntConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(LongConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(DoubleConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(StructureIndex index) const noexcept;
+		std::uint32_t TransformMappedIndex(MappedTypeIndex index) const noexcept;
+		std::uint32_t TransformMappedIndex(MappedStructureIndex index) const noexcept;
 		std::uint32_t TransformMappedIndex(MappedFunctionIndex index) const noexcept;
 
 		ExternModuleIndex AddExternModule(const std::string& path);
@@ -108,6 +113,10 @@ namespace sgn {
 		StructureInfo* GetStructureInfo(TypeIndex index) noexcept;
 		const StructureInfo* GetStructureInfo(StructureIndex index) const noexcept;
 		StructureInfo* GetStructureInfo(StructureIndex index) noexcept;
+		const StructureInfo* GetStructureInfo(MappedTypeIndex index) const noexcept;
+		StructureInfo* GetStructureInfo(MappedTypeIndex index) noexcept;
+		const StructureInfo* GetStructureInfo(MappedStructureIndex index) const noexcept;
+		StructureInfo* GetStructureInfo(MappedStructureIndex index) noexcept;
 
 		FunctionIndex AddFunction();
 		FunctionIndex AddFunction(std::uint16_t arity);
@@ -116,6 +125,7 @@ namespace sgn {
 		const FunctionInfo* GetFunctionInfo(FunctionIndex index) const noexcept;
 		FunctionInfo* GetFunctionInfo(FunctionIndex index) noexcept;
 
+		MappedStructureIndex Map(ExternModuleIndex module, ExternStructureIndex structure);
 		MappedFunctionIndex Map(ExternModuleIndex module, ExternFunctionIndex function);
 
 		const Instructions* GetEntrypoint() const noexcept;
