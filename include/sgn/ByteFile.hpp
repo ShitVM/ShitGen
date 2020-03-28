@@ -17,7 +17,7 @@ namespace sgn {
 		public:
 			using svm::core::ByteFile::ByteFile;
 			inline ByteFileAdapter(ByteFileAdapter&& byteFile) noexcept;
-			
+
 		public:
 			inline ByteFileAdapter& operator=(ByteFileAdapter&& byteFile) noexcept;
 

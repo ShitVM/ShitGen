@@ -16,8 +16,10 @@ namespace sgn {
 	SGN_INDEX(LabelIndex, 9);
 	SGN_INDEX(LocalVariableIndex, 10);
 
-	template<typename T>
-	constexpr std::uint8_t GetOperandIndex() noexcept;
-}
+	SGN_INDEX(ExternModuleIndex, 11);
+	SGN_INDEX(ExternStructureIndex, 12);
+	SGN_INDEX(ExternFunctionIndex, 13);
 
-#include "detail/impl/Operand.hpp"
+	template<typename T>
+	static constexpr std::uint8_t OperandIndex = static_cast<std::uint8_t>(T::OperandIndex);
+}

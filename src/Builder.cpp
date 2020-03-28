@@ -73,13 +73,13 @@ void Builder:: opCode() {											\
 	}																\
 	m_Instructions->AddInstruction(Instruction(OpCode:: opCode));	\
 }
-#define InstructionWithOperandImpl(opCode, indexType, version)								\
-void Builder:: opCode(indexType index) {													\
-	if (m_ByteFile->GetShitBCVersion() < version) {											\
-		throw std::runtime_error("Incompatible instruction");								\
-	}																						\
-	m_Instructions->AddInstruction(Instruction(OpCode:: opCode,								\
-		static_cast<std::uint32_t>(index), GetOperandIndex<indexType>()));					\
+#define InstructionWithOperandImpl(opCode, indexType, version)			\
+void Builder:: opCode(indexType index) {								\
+	if (m_ByteFile->GetShitBCVersion() < version) {						\
+		throw std::runtime_error("Incompatible instruction");			\
+	}																	\
+	m_Instructions->AddInstruction(Instruction(OpCode:: opCode,			\
+		static_cast<std::uint32_t>(index), OperandIndex<indexType>));	\
 }
 
 	InstructionImpl(Nop, ShitBCVersion::v0_1_0);
