@@ -1,11 +1,13 @@
 #pragma once
 
+#include <sgn/ExternModule.hpp>
 #include <sgn/Function.hpp>
 #include <sgn/Instruction.hpp>
 #include <sgn/Operand.hpp>
 #include <sgn/Specification.hpp>
 #include <sgn/Structure.hpp>
 #include <sgn/Type.hpp>
+#include <sgn/virtual/VirtualModule.hpp>
 #include <svm/core/ByteFile.hpp>
 
 #include <cstdint>
@@ -36,6 +38,8 @@ namespace sgn {
 		friend class Generator;
 
 	private:
+		ExternModuleManager m_Dependencies;
+
 		ShitBFVersion m_ShitBFVersion = ShitBFVersion::Latest;
 		ShitBCVersion m_ShitBCVersion = ShitBCVersion::Latest;
 		bool m_HasBuilder = false;
@@ -85,6 +89,12 @@ namespace sgn {
 		std::uint32_t TransformConstantIndex(LongConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(DoubleConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(StructureIndex index) const noexcept;
+		std::uint32_t TransformMappedIndex(MappedFunctionIndex index) const noexcept;
+
+		ExternModuleIndex AddExternModule(const std::string& path);
+		ExternModuleIndex GetExternModule(const std::string& path) const noexcept;
+		const VirtualModule* GetExternModuleInfo(ExternModuleIndex index) const noexcept;
+		VirtualModule* GetExternModuleInfo(ExternModuleIndex index) noexcept;
 
 		IntConstantIndex AddIntConstant(std::uint32_t value);
 		LongConstantIndex AddLongConstant(std::uint64_t value);
@@ -105,6 +115,8 @@ namespace sgn {
 		FunctionIndex AddFunction(std::uint16_t arity, bool hasResult);
 		const FunctionInfo* GetFunctionInfo(FunctionIndex index) const noexcept;
 		FunctionInfo* GetFunctionInfo(FunctionIndex index) noexcept;
+
+		MappedFunctionIndex Map(ExternModuleIndex module, ExternFunctionIndex function);
 
 		const Instructions* GetEntrypoint() const noexcept;
 		Instructions* GetEntrypoint() noexcept;

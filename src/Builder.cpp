@@ -129,6 +129,7 @@ void Builder:: opCode(indexType index) {								\
 	InstructionWithOperandImpl(Jb, LabelIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Jbe, LabelIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Call, FunctionIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Call, MappedFunctionIndex, ShitBCVersion::v0_4_0);
 	InstructionImpl(Ret, ShitBCVersion::v0_1_0);
 
 	InstructionImpl(ToI, ShitBCVersion::v0_1_0);

@@ -86,6 +86,7 @@ namespace sgn {
 		void Jb(LabelIndex index);
 		void Jbe(LabelIndex index);
 		void Call(FunctionIndex index);
+		void Call(MappedFunctionIndex index);
 		void Ret();
 
 		void ToI();

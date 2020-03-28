@@ -120,6 +120,7 @@ namespace sgn {
 		case OperandIndex<LongConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<LongConstantIndex>(operand));
 		case OperandIndex<DoubleConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<DoubleConstantIndex>(operand));
 		case OperandIndex<StructureIndex>: return m_ByteFile.TransformConstantIndex(static_cast<StructureIndex>(operand));
+		case OperandIndex<MappedFunctionIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedFunctionIndex>(operand));
 
 		default: return operand;
 		}

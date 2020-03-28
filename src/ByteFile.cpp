@@ -25,11 +25,13 @@ namespace sgn::detail {
 
 namespace sgn {
 	ByteFile::ByteFile(ByteFile&& byteFile) noexcept
-		: detail::ByteFileAdapter(std::move(byteFile)), m_ShitBFVersion(byteFile.m_ShitBFVersion), m_ShitBCVersion(byteFile.m_ShitBCVersion),
-		m_HasBuilder(byteFile.m_HasBuilder) {}
+		: detail::ByteFileAdapter(std::move(byteFile)), m_Dependencies(std::move(byteFile.m_Dependencies)),
+		m_ShitBFVersion(byteFile.m_ShitBFVersion), m_ShitBCVersion(byteFile.m_ShitBCVersion), m_HasBuilder(byteFile.m_HasBuilder) {}
 
 	ByteFile& ByteFile::operator=(ByteFile&& byteFile) noexcept {
 		detail::ByteFileAdapter::operator=(std::move(byteFile));
+
+		m_Dependencies = std::move(byteFile.m_Dependencies);
 
 		m_ShitBFVersion = byteFile.m_ShitBFVersion;
 		m_ShitBCVersion = byteFile.m_ShitBCVersion;
@@ -86,6 +88,23 @@ namespace sgn {
 	}
 	std::uint32_t ByteFile::TransformConstantIndex(StructureIndex index) const noexcept {
 		return GetConstantPool().GetAllCount() + static_cast<std::uint32_t>(index);
+	}
+	std::uint32_t ByteFile::TransformMappedIndex(MappedFunctionIndex index) const noexcept {
+		return static_cast<std::uint32_t>(GetFunctions().size() + static_cast<std::uint32_t>(index));
+	}
+
+	ExternModuleIndex ByteFile::AddExternModule(const std::string& path) {
+		GetDependencies().push_back(path);
+		return m_Dependencies.CreateModule(path);
+	}
+	ExternModuleIndex ByteFile::GetExternModule(const std::string& path) const noexcept {
+		return m_Dependencies.GetModule(path);
+	}
+	const VirtualModule* ByteFile::GetExternModuleInfo(ExternModuleIndex index) const noexcept {
+		return m_Dependencies.GetModuleInfo(index);
+	}
+	VirtualModule* ByteFile::GetExternModuleInfo(ExternModuleIndex index) noexcept {
+		return m_Dependencies.GetModuleInfo(index);
 	}
 
 	IntConstantIndex ByteFile::AddIntConstant(std::uint32_t value) {
@@ -155,6 +174,11 @@ namespace sgn {
 	}
 	FunctionInfo* ByteFile::GetFunctionInfo(FunctionIndex index) noexcept {
 		return &GetFunctions()[static_cast<std::uint32_t>(index)];
+	}
+
+	MappedFunctionIndex ByteFile::Map(ExternModuleIndex module, ExternFunctionIndex function) {
+		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module), static_cast<std::uint32_t>(function));
+		return static_cast<MappedFunctionIndex>(GetMappings().GetFunctionMappingCount() - 1);
 	}
 
 	const Instructions* ByteFile::GetEntrypoint() const noexcept {
