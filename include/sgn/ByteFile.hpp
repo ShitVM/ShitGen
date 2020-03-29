@@ -70,7 +70,7 @@ namespace sgn {
 		using svm::core::ByteFile::GetEntrypoint;
 		using svm::core::ByteFile::SetEntrypoint;
 
-		using svm::core::ByteFile::UpdateStructureCodes;
+		using svm::core::ByteFile::UpdateStructureInfos;
 
 	public:
 		ShitBFVersion GetShitBFVersion() const noexcept;

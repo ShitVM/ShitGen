@@ -37,7 +37,7 @@ namespace sgn::detail {
 		using svm::core::Loader<VirtualFunctionInfo>::GetModules;
 		using svm::core::Loader<VirtualFunctionInfo>::SetModules;
 
-		using svm::core::Loader<VirtualFunctionInfo>::UpdateStructureCodes;
+		using svm::core::Loader<VirtualFunctionInfo>::UpdateStructureInfos;
 	};
 }
 
