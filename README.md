@@ -6,7 +6,7 @@ ShitVM 바이트 파일 생성기
 $ git clone https://github.com/ShitVM/ShitGen.git --recurse-submodules
 $ cd ShitGen
 $ cmake .
-$ make
+$ cmake --build .
 ```
 
 ## 예제

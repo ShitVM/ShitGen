@@ -16,10 +16,10 @@ namespace sgn::detail {
 	}
 
 	const Instructions* ByteFileAdapter::GetEntrypointInternal() const noexcept {
-		return &GetEntrypoint();
+		return &svm::core::ByteFile::GetEntrypoint();
 	}
 	Instructions* ByteFileAdapter::GetEntrypointInternal() noexcept {
-		return &GetEntrypoint();
+		return &svm::core::ByteFile::GetEntrypoint();
 	}
 }
 

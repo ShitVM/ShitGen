@@ -25,9 +25,10 @@ namespace sgn::detail {
 		const Instructions* GetEntrypointInternal() const noexcept;
 		Instructions* GetEntrypointInternal() noexcept;
 
-	private:
-		using svm::core::ByteFile::GetEntrypoint;
-		using svm::core::ByteFile::SetEntrypoint;
+	public:
+		const Instructions& GetEntrypoint() const noexcept = delete;
+		Instructions& GetEntrypoint() noexcept = delete;
+		void SetEntrypoint(Instructions&& newEntrypoint) noexcept = delete;
 	};
 }
 
