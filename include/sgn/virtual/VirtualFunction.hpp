@@ -3,11 +3,12 @@
 #include <svm/core/virtual/VirtualFunction.hpp>
 
 #include <cstdint>
+#include <string>
 
 namespace sgn {
 	class VirtualFunctionInfo final : public svm::core::VirtualFunctionInfo {
 	public:
-		VirtualFunctionInfo(std::uint16_t arity, bool hasResult) noexcept;
+		VirtualFunctionInfo(std::string name, std::uint16_t arity, bool hasResult) noexcept;
 		VirtualFunctionInfo(VirtualFunctionInfo&& functionInfo) noexcept;
 		~VirtualFunctionInfo() = default;
 

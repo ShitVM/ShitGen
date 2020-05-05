@@ -6,6 +6,7 @@
 #include <svm/core/virtual/VirtualModule.hpp>
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 namespace sgn {
@@ -18,7 +19,7 @@ namespace sgn {
 		VirtualModule& operator=(VirtualModule&& module) noexcept;
 
 	public:
-		ExternStructureIndex AddStructure(const std::vector<Field>& fields);
-		ExternFunctionIndex AddFunction(std::uint16_t arity, bool hasResult);
+		ExternStructureIndex AddStructure(std::string name, const std::vector<Field>& fields);
+		ExternFunctionIndex AddFunction(std::string name, std::uint16_t arity, bool hasResult);
 	};
 }

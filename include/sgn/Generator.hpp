@@ -34,6 +34,7 @@ namespace sgn {
 	private:
 		template<typename T>
 		void Write(T value);
+		void Write(const std::string& value);
 
 		void Generate(const svm::core::ConstantPool& constantPool);
 		void Generate(const Structures& structures);

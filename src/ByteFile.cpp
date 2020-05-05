@@ -2,8 +2,8 @@
 
 #include <sgn/ConstantPool.hpp>
 
+#include <algorithm>
 #include <cassert>
-#include <string>
 #include <utility>
 
 namespace sgn::detail {
@@ -144,11 +144,13 @@ namespace sgn {
 		return static_cast<DoubleConstantIndex>(GetConstantPool().AddDoubleConstant(value));
 	}
 
-	StructureIndex ByteFile::AddStructure() {
+	StructureIndex ByteFile::AddStructure(std::string name) {
 		const std::uint32_t number = static_cast<std::uint32_t>(GetStructures().size() + static_cast<std::uint32_t>(TypeCode::Structure));
-		std::string name = "structure" + std::to_string(number - static_cast<std::uint32_t>(TypeCode::Structure));
+		if (const auto iter = std::find_if(GetStructures().begin(), GetStructures().end(), [&name](const auto& structure) {
+				return name == structure.Name;
+			}) != GetStructures().end()) throw std::runtime_error("Duplicated structure name.");
 
-		GetStructures().emplace_back(std::vector<svm::Field>(), TypeInfo(std::move(name), static_cast<TypeCode>(number)));
+		GetStructures().emplace_back(std::move(name), std::vector<svm::Field>(), TypeInfo(std::move(name), static_cast<TypeCode>(number)));
 		return static_cast<StructureIndex>(GetStructures().size() - 1);
 	}
 	const StructureInfo* ByteFile::GetStructureInfo(TypeIndex index) const noexcept {
@@ -170,12 +172,16 @@ namespace sgn {
 	const StructureInfo* ByteFile::GetStructureInfo(MappedTypeIndex index) const noexcept {
 		const auto& mapping = GetMappings().GetStructureMapping(static_cast<std::uint32_t>(index));
 		const auto moduleInfo = m_Dependencies.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
-		return static_cast<const StructureInfo*>(&moduleInfo->GetStructures()[mapping.Index]);
+		return static_cast<const sgn::StructureInfo*>(&*std::find_if(moduleInfo->GetStructures().begin(), moduleInfo->GetStructures().end(), [&mapping](const auto& structure) {
+			return mapping.Name == structure.Name;
+		}));
 	}
 	StructureInfo* ByteFile::GetStructureInfo(MappedTypeIndex index) noexcept {
 		const auto& mapping = GetMappings().GetStructureMapping(static_cast<std::uint32_t>(index));
 		const auto moduleInfo = m_Dependencies.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
-		return static_cast<StructureInfo*>(&moduleInfo->GetStructures()[mapping.Index]);
+		return static_cast<sgn::StructureInfo*>(&*std::find_if(moduleInfo->GetStructures().begin(), moduleInfo->GetStructures().end(), [&mapping](const auto& structure) {
+			return mapping.Name == structure.Name;
+		}));
 	}
 	const StructureInfo* ByteFile::GetStructureInfo(MappedStructureIndex index) const noexcept {
 		return GetStructureInfo(GetTypeIndex(index));
@@ -184,20 +190,21 @@ namespace sgn {
 		return GetStructureInfo(GetTypeIndex(index));
 	}
 
-	FunctionIndex ByteFile::AddFunction() {
-		GetFunctions().emplace_back();
-		return static_cast<FunctionIndex>(GetFunctions().size() - 1);
+	FunctionIndex ByteFile::AddFunction(std::string name) {
+		return AddFunction(std::move(name), 0, false);
 	}
-	FunctionIndex ByteFile::AddFunction(std::uint16_t arity) {
-		GetFunctions().emplace_back(arity);
-		return static_cast<FunctionIndex>(GetFunctions().size() - 1);
+	FunctionIndex ByteFile::AddFunction(std::string name, std::uint16_t arity) {
+		return AddFunction(std::move(name), arity, false);
 	}
-	FunctionIndex ByteFile::AddFunction(bool hasResult) {
-		GetFunctions().emplace_back(hasResult);
-		return static_cast<FunctionIndex>(GetFunctions().size() - 1);
+	FunctionIndex ByteFile::AddFunction(std::string name, bool hasResult) {
+		return AddFunction(std::move(name), 0, hasResult);
 	}
-	FunctionIndex ByteFile::AddFunction(std::uint16_t arity, bool hasResult) {
-		GetFunctions().emplace_back(arity, hasResult);
+	FunctionIndex ByteFile::AddFunction(std::string name, std::uint16_t arity, bool hasResult) {
+		if (const auto iter = std::find_if(GetFunctions().begin(), GetFunctions().end(), [&name](const auto& function) {
+				return name == function.Name;
+			}) != GetFunctions().end()) throw std::runtime_error("Duplicated function name.");
+
+		GetFunctions().emplace_back(std::move(name), arity, hasResult);
 		return static_cast<FunctionIndex>(GetFunctions().size() - 1);
 	}
 	const FunctionInfo* ByteFile::GetFunctionInfo(FunctionIndex index) const noexcept {
@@ -208,11 +215,11 @@ namespace sgn {
 	}
 
 	MappedStructureIndex ByteFile::Map(ExternModuleIndex module, ExternStructureIndex structure) {
-		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module), static_cast<std::uint32_t>(structure));
+		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module), GetStructures()[static_cast<std::uint32_t>(structure)].Name);
 		return static_cast<MappedStructureIndex>(GetMappings().GetStructureMappingCount() - 1);
 	}
 	MappedFunctionIndex ByteFile::Map(ExternModuleIndex module, ExternFunctionIndex function) {
-		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module), static_cast<std::uint32_t>(function));
+		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module), GetFunctions()[static_cast<std::uint32_t>(function)].Name);
 		return static_cast<MappedFunctionIndex>(GetMappings().GetFunctionMappingCount() - 1);
 	}
 

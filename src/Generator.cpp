@@ -32,6 +32,11 @@ namespace sgn {
 		Generate(*m_ByteFile.GetEntrypointInternal());
 	}
 
+	void Generator::Write(const std::string& value) {
+		Write(static_cast<std::uint32_t>(value.size()));
+		m_Stream.write(value.c_str(), static_cast<std::streamsize>(value.size()));
+	}
+
 	void Generator::Generate(const svm::core::ConstantPool& constantPool) {
 		const auto& intPool = constantPool.GetIntPool();
 		Write(static_cast<std::uint32_t>(intPool.size()));
@@ -54,8 +59,10 @@ namespace sgn {
 	void Generator::Generate(const Structures& structures) {
 		Write(static_cast<std::uint32_t>(structures.size()));
 		for (std::uint32_t i = 0; i < structures.size(); ++i) {
-			const auto& fields = structures[i].Fields;
+			const auto& structure = structures[i];
+			Write(structure.Name);
 
+			const auto& fields = structure.Fields;
 			Write(static_cast<std::uint32_t>(fields.size()));
 			for (std::uint32_t j = 0; j < fields.size(); ++j) {
 				if (fields[j].IsArray()) {
@@ -71,7 +78,7 @@ namespace sgn {
 		Write(static_cast<std::uint32_t>(functions.size()));
 		for (std::uint32_t i = 0; i < functions.size(); ++i) {
 			const auto& func = functions[i];
-
+			Write(func.Name);
 			Write(func.Arity);
 			Write(func.HasResult);
 			Generate(func.Instructions);
@@ -82,18 +89,16 @@ namespace sgn {
 		Write(structMappingCount);
 		for (std::uint32_t i = 0; i < structMappingCount; ++i) {
 			const auto& mapping = mappings.GetStructureMapping(i);
-
 			Write(mapping.Module);
-			Write(mapping.Index);
+			Write(mapping.Name);
 		}
 
 		const std::uint32_t funcMappingCount = mappings.GetFunctionMappingCount();
 		Write(funcMappingCount);
 		for (std::uint32_t i = 0; i < funcMappingCount; ++i) {
 			const auto& mapping = mappings.GetFunctionMapping(i);
-
 			Write(mapping.Module);
-			Write(mapping.Index);
+			Write(mapping.Name);
 		}
 	}
 	void Generator::Generate(const Instructions& instructions) {

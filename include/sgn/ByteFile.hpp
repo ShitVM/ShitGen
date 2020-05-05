@@ -11,6 +11,7 @@
 #include <svm/core/ByteFile.hpp>
 
 #include <cstdint>
+#include <string>
 
 namespace sgn::detail {
 	class ByteFileAdapter : public svm::core::ByteFile {
@@ -109,7 +110,7 @@ namespace sgn {
 		LongConstantIndex AddLongConstantFast(std::uint64_t value);
 		DoubleConstantIndex AddDoubleConstantFast(double value);
 
-		StructureIndex AddStructure();
+		StructureIndex AddStructure(std::string name);
 		const StructureInfo* GetStructureInfo(TypeIndex index) const noexcept;
 		StructureInfo* GetStructureInfo(TypeIndex index) noexcept;
 		const StructureInfo* GetStructureInfo(StructureIndex index) const noexcept;
@@ -119,10 +120,10 @@ namespace sgn {
 		const StructureInfo* GetStructureInfo(MappedStructureIndex index) const noexcept;
 		StructureInfo* GetStructureInfo(MappedStructureIndex index) noexcept;
 
-		FunctionIndex AddFunction();
-		FunctionIndex AddFunction(std::uint16_t arity);
-		FunctionIndex AddFunction(bool hasResult);
-		FunctionIndex AddFunction(std::uint16_t arity, bool hasResult);
+		FunctionIndex AddFunction(std::string name);
+		FunctionIndex AddFunction(std::string name, std::uint16_t arity);
+		FunctionIndex AddFunction(std::string name, bool hasResult);
+		FunctionIndex AddFunction(std::string name, std::uint16_t arity, bool hasResult);
 		const FunctionInfo* GetFunctionInfo(FunctionIndex index) const noexcept;
 		FunctionInfo* GetFunctionInfo(FunctionIndex index) noexcept;
 
