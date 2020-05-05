@@ -150,7 +150,8 @@ namespace sgn {
 				return name == structure.Name;
 			}) != GetStructures().end()) throw std::runtime_error("Duplicated structure name.");
 
-		GetStructures().emplace_back(std::move(name), std::vector<svm::Field>(), TypeInfo(std::move(name), static_cast<TypeCode>(number)));
+		TypeInfo info(name, static_cast<TypeCode>(number));
+		GetStructures().emplace_back(std::move(name), std::vector<svm::Field>(), std::move(info));
 		return static_cast<StructureIndex>(GetStructures().size() - 1);
 	}
 	const StructureInfo* ByteFile::GetStructureInfo(TypeIndex index) const noexcept {
