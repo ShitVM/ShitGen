@@ -22,7 +22,7 @@ namespace sgn::detail {
 	ExternModuleIndex LoaderAdapter::GetModuleInternal(const std::string& path) const noexcept {
 		const auto& modules = GetModules();
 		const auto iter = std::find_if(modules.begin(), modules.end(), [path](const auto& module) {
-			return module.GetPath() == path;
+			return module->GetPath() == path;
 		});
 		if (iter == modules.end()) {
 			assert(false);
@@ -30,10 +30,10 @@ namespace sgn::detail {
 		} else return static_cast<ExternModuleIndex>(std::distance(modules.begin(), iter));
 	}
 	const VirtualModule* LoaderAdapter::GetModuleInfoInternal(ExternModuleIndex index) const noexcept {
-		return static_cast<const VirtualModule*>(&std::get<svm::core::VirtualModule<VirtualFunctionInfo>>(GetModules()[static_cast<std::uint32_t>(index)].Module));
+		return static_cast<const VirtualModule*>(&std::get<svm::core::VirtualModule<VirtualFunctionInfo>>(GetModules()[static_cast<std::uint32_t>(index)]->Module));
 	}
 	VirtualModule* LoaderAdapter::GetModuleInfoInternal(ExternModuleIndex index) noexcept {
-		return static_cast<VirtualModule*>(&std::get<svm::core::VirtualModule<VirtualFunctionInfo>>(GetModules()[static_cast<std::uint32_t>(index)].Module));
+		return static_cast<VirtualModule*>(&std::get<svm::core::VirtualModule<VirtualFunctionInfo>>(GetModules()[static_cast<std::uint32_t>(index)]->Module));
 	}
 }
 
