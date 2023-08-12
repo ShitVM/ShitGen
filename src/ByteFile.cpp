@@ -216,11 +216,13 @@ namespace sgn {
 	}
 
 	MappedStructureIndex ByteFile::Map(ExternModuleIndex module, ExternStructureIndex structure) {
-		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module), GetStructures()[static_cast<std::uint32_t>(structure)].Name);
+		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module),
+			m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)].Name);
 		return static_cast<MappedStructureIndex>(GetMappings().GetStructureMappingCount() - 1);
 	}
 	MappedFunctionIndex ByteFile::Map(ExternModuleIndex module, ExternFunctionIndex function) {
-		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module), GetFunctions()[static_cast<std::uint32_t>(function)].Name);
+		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module),
+			std::string(m_Dependencies.GetModuleInfo(module)->GetFunctions()[static_cast<std::uint32_t>(function)].GetName()));
 		return static_cast<MappedFunctionIndex>(GetMappings().GetFunctionMappingCount() - 1);
 	}
 
