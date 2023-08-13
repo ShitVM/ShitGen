@@ -31,7 +31,6 @@ namespace sgn::detail {
 
 	private:
 		using svm::core::Loader<VirtualFunctionInfo>::Load;
-		using svm::core::Loader<VirtualFunctionInfo>::LoadDependencies;
 
 		using svm::core::Loader<VirtualFunctionInfo>::GetModule;
 		using svm::core::Loader<VirtualFunctionInfo>::GetModules;
