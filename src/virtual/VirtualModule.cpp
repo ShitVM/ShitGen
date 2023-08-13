@@ -14,7 +14,8 @@ namespace sgn {
 	ExternStructureIndex VirtualModule::AddStructure(std::string name, const std::vector<Field>& fields) {
 		auto& structures = GetStructures();
 		StructureInfo& structure = static_cast<StructureInfo&>(structures.emplace_back());
-		structure.Name = std::move(name);
+		structure.Name = name;
+		structure.Type.Name = std::move(name);
 
 		for (const auto& field : fields) {
 			structure.AddField(field);
