@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <variant>
 
 namespace sgn {
 #define SGN_INDEX(name, index) enum class name : std::uint32_t { OperandIndex = index };
@@ -26,4 +27,7 @@ namespace sgn {
 
 	template<typename T>
 	static constexpr std::uint8_t OperandIndex = static_cast<std::uint8_t>(T::OperandIndex);
+
+	using GeneralTypeIndex = std::variant<TypeIndex, MappedTypeIndex>;
+	using GeneralArrayIndex = std::variant<ArrayIndex, MappedArrayIndex>;
 }

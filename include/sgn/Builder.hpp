@@ -98,17 +98,22 @@ namespace sgn {
 		void Null();
 		void New(TypeIndex index);
 		void New(MappedTypeIndex index);
+		void New(GeneralTypeIndex index);
 		void Delete();
 		void GCNull();
 		void GCNew(TypeIndex index);
 		void GCNew(MappedTypeIndex index);
+		void GCNew(GeneralTypeIndex index);
 
 		void APush(ArrayIndex index);
 		void APush(MappedArrayIndex index);
+		void APush(GeneralArrayIndex index);
 		void ANew(ArrayIndex index);
 		void ANew(MappedArrayIndex index);
+		void ANew(GeneralArrayIndex index);
 		void AGCNew(ArrayIndex index);
 		void AGCNew(MappedArrayIndex index);
+		void AGCNew(GeneralArrayIndex index);
 		void ALea();
 		void Count();
 	};

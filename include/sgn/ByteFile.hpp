@@ -81,14 +81,15 @@ namespace sgn {
 		void SetShitBCVersion(ShitBCVersion version) noexcept;
 		void CreatedBuilder() noexcept;
 
-		TypeIndex GetTypeIndex(Type type) const noexcept;
-		TypeIndex GetTypeIndex(StructureIndex structure) const noexcept;
-		MappedTypeIndex GetTypeIndex(MappedStructureIndex structure) const noexcept;
-		ArrayIndex MakeArray(Type type) const;
-		ArrayIndex MakeArray(StructureIndex structure) const;
-		ArrayIndex MakeArray(TypeIndex type) const;
-		MappedArrayIndex MakeArray(MappedStructureIndex structure) const;
-		MappedArrayIndex MakeArray(MappedTypeIndex type) const;
+		GeneralTypeIndex GetTypeIndex(Type type) const;
+		GeneralTypeIndex GetTypeIndex(StructureIndex structure) const noexcept;
+		GeneralTypeIndex GetTypeIndex(MappedStructureIndex structure) const noexcept;
+		GeneralArrayIndex MakeArray(Type type) const;
+		GeneralArrayIndex MakeArray(StructureIndex structure) const;
+		GeneralArrayIndex MakeArray(MappedStructureIndex structure) const;
+		GeneralArrayIndex MakeArray(TypeIndex type) const;
+		GeneralArrayIndex MakeArray(MappedTypeIndex type) const;
+		GeneralArrayIndex MakeArray(GeneralTypeIndex type) const;
 
 		std::uint32_t TransformConstantIndex(IntConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(LongConstantIndex index) const noexcept;
@@ -111,14 +112,16 @@ namespace sgn {
 		DoubleConstantIndex AddDoubleConstantFast(double value);
 
 		StructureIndex AddStructure(std::string name);
-		const StructureInfo* GetStructureInfo(TypeIndex index) const noexcept;
-		StructureInfo* GetStructureInfo(TypeIndex index) noexcept;
 		const StructureInfo* GetStructureInfo(StructureIndex index) const noexcept;
 		StructureInfo* GetStructureInfo(StructureIndex index) noexcept;
-		const StructureInfo* GetStructureInfo(MappedTypeIndex index) const noexcept;
-		StructureInfo* GetStructureInfo(MappedTypeIndex index) noexcept;
 		const StructureInfo* GetStructureInfo(MappedStructureIndex index) const noexcept;
 		StructureInfo* GetStructureInfo(MappedStructureIndex index) noexcept;
+		const StructureInfo* GetStructureInfo(TypeIndex index) const noexcept;
+		StructureInfo* GetStructureInfo(TypeIndex index) noexcept;
+		const StructureInfo* GetStructureInfo(MappedTypeIndex index) const noexcept;
+		StructureInfo* GetStructureInfo(MappedTypeIndex index) noexcept;
+		const StructureInfo* GetStructureInfo(GeneralTypeIndex index) const noexcept;
+		StructureInfo* GetStructureInfo(GeneralTypeIndex index) noexcept;
 
 		FunctionIndex AddFunction(std::string name);
 		FunctionIndex AddFunction(std::string name, std::uint16_t arity);
@@ -129,6 +132,7 @@ namespace sgn {
 
 		MappedStructureIndex Map(ExternModuleIndex module, ExternStructureIndex structure);
 		MappedFunctionIndex Map(ExternModuleIndex module, ExternFunctionIndex function);
+		MappedStructureIndex GetMapping(MappedTypeIndex structure);
 
 		const Instructions* GetEntrypoint() const noexcept;
 		Instructions* GetEntrypoint() noexcept;

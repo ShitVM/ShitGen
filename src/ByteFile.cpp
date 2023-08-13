@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <exception>
 #include <utility>
 
 namespace sgn::detail {
@@ -61,29 +62,48 @@ namespace sgn {
 		m_HasBuilder = true;
 	}
 
-	TypeIndex ByteFile::GetTypeIndex(Type type) const noexcept {
-		return static_cast<TypeIndex>(type->Code);
+	GeneralTypeIndex ByteFile::GetTypeIndex(Type type) const {
+		if (type->Module == 0) {
+			return static_cast<TypeIndex>(type->Code);
+		} else {
+			const auto& mappings = GetMappings();
+			const auto count = mappings.GetStructureMappingCount();
+			for (std::uint32_t i = 0; i < count; ++i) {
+				if (mappings.GetStructureMapping(i).Module == type->Module && mappings.GetStructureMapping(i).Name == type->Name) {
+					return static_cast<MappedTypeIndex>(i);
+				}
+			}
+
+			throw std::runtime_error("Not mapped structure");
+		}
 	}
-	TypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
+	GeneralTypeIndex ByteFile::GetTypeIndex(StructureIndex structure) const noexcept {
 		return static_cast<TypeIndex>(static_cast<std::uint32_t>(structure) + static_cast<std::uint32_t>(TypeCode::Structure));
 	}
-	MappedTypeIndex ByteFile::GetTypeIndex(MappedStructureIndex structure) const noexcept {
+	GeneralTypeIndex ByteFile::GetTypeIndex(MappedStructureIndex structure) const noexcept {
 		return static_cast<MappedTypeIndex>(structure);
 	}
-	ArrayIndex ByteFile::MakeArray(Type type) const {
+	GeneralArrayIndex ByteFile::MakeArray(Type type) const {
 		return MakeArray(GetTypeIndex(type));
 	}
-	ArrayIndex ByteFile::MakeArray(StructureIndex structure) const {
+	GeneralArrayIndex ByteFile::MakeArray(StructureIndex structure) const {
 		return MakeArray(GetTypeIndex(structure));
 	}
-	ArrayIndex ByteFile::MakeArray(TypeIndex type) const {
+	GeneralArrayIndex ByteFile::MakeArray(MappedStructureIndex structure) const {
+		return MakeArray(GetTypeIndex(structure));
+	}
+	GeneralArrayIndex ByteFile::MakeArray(TypeIndex type) const {
 		return static_cast<ArrayIndex>(type);
 	}
-	MappedArrayIndex ByteFile::MakeArray(MappedStructureIndex structure) const {
-		return MakeArray(GetTypeIndex(structure));
-	}
-	MappedArrayIndex ByteFile::MakeArray(MappedTypeIndex type) const {
+	GeneralArrayIndex ByteFile::MakeArray(MappedTypeIndex type) const {
 		return static_cast<MappedArrayIndex>(type);
+	}
+	GeneralArrayIndex ByteFile::MakeArray(GeneralTypeIndex type) const {
+		if (std::holds_alternative<TypeIndex>(type)) {
+			return MakeArray(std::get<TypeIndex>(type));
+		} else if (std::holds_alternative<MappedTypeIndex>(type)) {
+			return MakeArray(std::get<MappedTypeIndex>(type));
+		}
 	}
 
 	std::uint32_t ByteFile::TransformConstantIndex(IntConstantIndex index) const noexcept {
@@ -99,7 +119,7 @@ namespace sgn {
 		return GetConstantPool().GetAllCount() + static_cast<std::uint32_t>(index);
 	}
 	std::uint32_t ByteFile::TransformMappedIndex(MappedTypeIndex index) const noexcept {
-		return static_cast<std::uint32_t>(GetStructures().size() + static_cast<std::uint32_t>(index));
+		return static_cast<std::uint32_t>(GetStructures().size() + static_cast<std::uint32_t>(TypeCode::Structure) + static_cast<std::uint32_t>(index));
 	}
 	std::uint32_t ByteFile::TransformMappedIndex(MappedStructureIndex index) const noexcept {
 		return GetConstantPool().GetAllCount() + TransformMappedIndex(static_cast<MappedTypeIndex>(index));
@@ -154,6 +174,18 @@ namespace sgn {
 		GetStructures().emplace_back(std::move(name), std::vector<svm::Field>(), std::move(info));
 		return static_cast<StructureIndex>(GetStructures().size() - 1);
 	}
+	const StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) const noexcept {
+		return GetStructureInfo(GetTypeIndex(index));
+	}
+	StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) noexcept {
+		return GetStructureInfo(GetTypeIndex(index));
+	}
+	const StructureInfo* ByteFile::GetStructureInfo(MappedStructureIndex index) const noexcept {
+		return GetStructureInfo(GetTypeIndex(index));
+	}
+	StructureInfo* ByteFile::GetStructureInfo(MappedStructureIndex index) noexcept {
+		return GetStructureInfo(GetTypeIndex(index));
+	}
 	const StructureInfo* ByteFile::GetStructureInfo(TypeIndex index) const noexcept {
 		assert(static_cast<std::uint32_t>(index) >= static_cast<std::uint32_t>(TypeCode::Structure));
 
@@ -163,12 +195,6 @@ namespace sgn {
 		assert(static_cast<std::uint32_t>(index) >= static_cast<std::uint32_t>(TypeCode::Structure));
 
 		return static_cast<StructureInfo*>(&GetStructures()[static_cast<std::uint32_t>(index) - static_cast<std::uint32_t>(TypeCode::Structure)]);
-	}
-	const StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) const noexcept {
-		return GetStructureInfo(GetTypeIndex(index));
-	}
-	StructureInfo* ByteFile::GetStructureInfo(StructureIndex index) noexcept {
-		return GetStructureInfo(GetTypeIndex(index));
 	}
 	const StructureInfo* ByteFile::GetStructureInfo(MappedTypeIndex index) const noexcept {
 		const auto& mapping = GetMappings().GetStructureMapping(static_cast<std::uint32_t>(index));
@@ -184,11 +210,19 @@ namespace sgn {
 			return mapping.Name == structure.Name;
 		}));
 	}
-	const StructureInfo* ByteFile::GetStructureInfo(MappedStructureIndex index) const noexcept {
-		return GetStructureInfo(GetTypeIndex(index));
+	const StructureInfo* ByteFile::GetStructureInfo(GeneralTypeIndex index) const noexcept {
+		if (std::holds_alternative<TypeIndex>(index)) {
+			return GetStructureInfo(std::get<TypeIndex>(index));
+		} else if (std::holds_alternative<MappedTypeIndex>(index)) {
+			return GetStructureInfo(std::get<MappedTypeIndex>(index));
+		}
 	}
-	StructureInfo* ByteFile::GetStructureInfo(MappedStructureIndex index) noexcept {
-		return GetStructureInfo(GetTypeIndex(index));
+	StructureInfo* ByteFile::GetStructureInfo(GeneralTypeIndex index) noexcept {
+		if (std::holds_alternative<TypeIndex>(index)) {
+			return GetStructureInfo(std::get<TypeIndex>(index));
+		} else if (std::holds_alternative<MappedTypeIndex>(index)) {
+			return GetStructureInfo(std::get<MappedTypeIndex>(index));
+		}
 	}
 
 	FunctionIndex ByteFile::AddFunction(std::string name) {
@@ -216,6 +250,9 @@ namespace sgn {
 	}
 
 	MappedStructureIndex ByteFile::Map(ExternModuleIndex module, ExternStructureIndex structure) {
+		auto& structureInfo = m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)];
+		structureInfo.Type.Module = static_cast<std::uint32_t>(module);
+
 		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module),
 			m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)].Name);
 		return static_cast<MappedStructureIndex>(GetMappings().GetStructureMappingCount() - 1);
@@ -224,6 +261,9 @@ namespace sgn {
 		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module),
 			std::string(m_Dependencies.GetModuleInfo(module)->GetFunctions()[static_cast<std::uint32_t>(function)].GetName()));
 		return static_cast<MappedFunctionIndex>(GetMappings().GetFunctionMappingCount() - 1);
+	}
+	MappedStructureIndex ByteFile::GetMapping(MappedTypeIndex structure) {
+		return static_cast<MappedStructureIndex>(structure);
 	}
 
 	const Instructions* ByteFile::GetEntrypoint() const noexcept {

@@ -81,6 +81,14 @@ void Builder:: opCode(indexType index) {								\
 	m_Instructions->AddInstruction(Instruction(OpCode:: opCode,			\
 		static_cast<std::uint32_t>(index), OperandIndex<indexType>));	\
 }
+#define InstructionWithGeneralOperandImpl(opCode, generalIndexType, firstIndexType, secondIndexType)	\
+void Builder:: opCode(generalIndexType index) {															\
+	if (std::holds_alternative<firstIndexType>(index)) {												\
+		opCode(std::get<firstIndexType>(index));														\
+	} else if (std::holds_alternative<secondIndexType>(index)) {										\
+		opCode(std::get<secondIndexType>(index));														\
+	}																									\
+}
 
 	InstructionImpl(Nop, ShitBCVersion::v0_1_0);
 
@@ -141,17 +149,22 @@ void Builder:: opCode(indexType index) {								\
 	InstructionImpl(Null, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(New, TypeIndex, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(New, MappedTypeIndex, ShitBCVersion::v0_4_0);
+	InstructionWithGeneralOperandImpl(New, GeneralTypeIndex, TypeIndex, MappedTypeIndex);
 	InstructionImpl(Delete, ShitBCVersion::v0_3_0);
 	InstructionImpl(GCNull, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(GCNew, TypeIndex, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(GCNew, MappedTypeIndex, ShitBCVersion::v0_4_0);
+	InstructionWithGeneralOperandImpl(GCNew, GeneralTypeIndex, TypeIndex, MappedTypeIndex);
 
 	InstructionWithOperandImpl(APush, ArrayIndex, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(APush, MappedArrayIndex, ShitBCVersion::v0_4_0);
+	InstructionWithGeneralOperandImpl(APush, GeneralArrayIndex, ArrayIndex, MappedArrayIndex);
 	InstructionWithOperandImpl(ANew, ArrayIndex, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(ANew, MappedArrayIndex, ShitBCVersion::v0_4_0);
+	InstructionWithGeneralOperandImpl(ANew, GeneralArrayIndex, ArrayIndex, MappedArrayIndex);
 	InstructionWithOperandImpl(AGCNew, ArrayIndex, ShitBCVersion::v0_3_0);
 	InstructionWithOperandImpl(AGCNew, MappedArrayIndex, ShitBCVersion::v0_4_0);
+	InstructionWithGeneralOperandImpl(AGCNew, GeneralArrayIndex, ArrayIndex, MappedArrayIndex);
 	InstructionImpl(ALea, ShitBCVersion::v0_3_0);
 	InstructionImpl(Count, ShitBCVersion::v0_3_0);
 }

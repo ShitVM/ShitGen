@@ -65,11 +65,19 @@ namespace sgn {
 			const auto& fields = structure.Fields;
 			Write(static_cast<std::uint32_t>(fields.size()));
 			for (std::uint32_t j = 0; j < fields.size(); ++j) {
+				std::uint32_t typeCode;
+				const auto typeIndex = m_ByteFile.GetTypeIndex(fields[j].Type);
+				if (std::holds_alternative<TypeIndex>(typeIndex)) {
+					typeCode = static_cast<std::uint32_t>(fields[j].Type->Code);
+				} else if (std::holds_alternative<MappedTypeIndex>(typeIndex)) {
+					typeCode = m_ByteFile.TransformMappedIndex(std::get<MappedTypeIndex>(typeIndex));
+				}
+
 				if (fields[j].IsArray()) {
-					Write(static_cast<std::uint32_t>(fields[j].Type->Code) | (1 << 31));
+					Write(typeCode | (1 << 31));
 					Write(fields[j].Count);
 				} else {
-					Write(fields[j].Type->Code);
+					Write(typeCode);
 				}
 			}
 		}
