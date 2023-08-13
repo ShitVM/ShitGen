@@ -251,7 +251,7 @@ namespace sgn {
 
 	MappedStructureIndex ByteFile::Map(ExternModuleIndex module, ExternStructureIndex structure) {
 		auto& structureInfo = m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)];
-		structureInfo.Type.Module = static_cast<std::uint32_t>(module);
+		structureInfo.Type.Module = static_cast<std::uint32_t>(module) + 1;
 
 		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module),
 			m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)].Name);
