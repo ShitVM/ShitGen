@@ -69,7 +69,7 @@ namespace sgn {
 			const auto& mappings = GetMappings();
 			const auto count = mappings.GetStructureMappingCount();
 			for (std::uint32_t i = 0; i < count; ++i) {
-				if (mappings.GetStructureMapping(i).Module == type->Module && mappings.GetStructureMapping(i).Name == type->Name) {
+				if (mappings.GetStructureMapping(i).Module == type->Module - 1 && mappings.GetStructureMapping(i).Name == type->Name) {
 					return static_cast<MappedTypeIndex>(i);
 				}
 			}
