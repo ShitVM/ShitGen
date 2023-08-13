@@ -36,10 +36,10 @@ namespace sgn {
 		void Write(T value);
 		void Write(const std::string& value);
 
+		void Generate(const svm::Mappings& mappings);
 		void Generate(const svm::core::ConstantPool& constantPool);
 		void Generate(const Structures& structures);
 		void Generate(const Functions& functions);
-		void Generate(const svm::Mappings& mappings);
 		void Generate(const Instructions& instructions);
 
 		std::uint32_t ConvertOperand(std::uint32_t operand, std::uint8_t operandIndex) noexcept;
