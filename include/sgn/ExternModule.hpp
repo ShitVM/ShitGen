@@ -5,6 +5,7 @@
 #include <sgn/virtual/VirtualModule.hpp>
 #include <svm/core/Loader.hpp>
 #include <svm/core/Module.hpp>
+#include <svm/core/ModuleBase.hpp>
 
 namespace sgn {
 	using ExternModuleInfo = svm::core::ModuleInfo<VirtualFunctionInfo>;
@@ -22,7 +23,7 @@ namespace sgn::detail {
 		LoaderAdapter& operator=(LoaderAdapter&& loader) noexcept;
 
 	protected:
-		ExternModuleIndex GetModuleInternal(const std::string& path) const noexcept;
+		ExternModuleIndex GetModuleInternal(const svm::core::ModulePath& path) const noexcept;
 		const VirtualModule* GetModuleInfoInternal(ExternModuleIndex index) const noexcept;
 		VirtualModule* GetModuleInfoInternal(ExternModuleIndex index) noexcept;
 
@@ -31,10 +32,13 @@ namespace sgn::detail {
 
 	private:
 		using svm::core::Loader<VirtualFunctionInfo>::Load;
+		using svm::core::Loader<VirtualFunctionInfo>::Build;
 
 		using svm::core::Loader<VirtualFunctionInfo>::GetModule;
 		using svm::core::Loader<VirtualFunctionInfo>::GetModules;
 		using svm::core::Loader<VirtualFunctionInfo>::SetModules;
+
+		using svm::core::Loader<VirtualFunctionInfo>::ResolveDependency;
 	};
 }
 
@@ -52,5 +56,8 @@ namespace sgn {
 		ExternModuleIndex GetModule(const std::string& path) const noexcept;
 		const VirtualModule* GetModuleInfo(ExternModuleIndex index) const noexcept;
 		VirtualModule* GetModuleInfo(ExternModuleIndex index) noexcept;
+
+	private:
+		static svm::core::ModulePath ResolveDependency(const std::string& path);
 	};
 }

@@ -26,13 +26,13 @@ namespace sgn::detail {
 
 namespace sgn {
 	ByteFile::ByteFile(ByteFile&& byteFile) noexcept
-		: detail::ByteFileAdapter(std::move(byteFile)), m_Dependencies(std::move(byteFile.m_Dependencies)),
+		: detail::ByteFileAdapter(std::move(byteFile)), m_ExternModuleManager(std::move(byteFile.m_ExternModuleManager)),
 		m_ShitBFVersion(byteFile.m_ShitBFVersion), m_ShitBCVersion(byteFile.m_ShitBCVersion), m_HasBuilder(byteFile.m_HasBuilder) {}
 
 	ByteFile& ByteFile::operator=(ByteFile&& byteFile) noexcept {
 		detail::ByteFileAdapter::operator=(std::move(byteFile));
 
-		m_Dependencies = std::move(byteFile.m_Dependencies);
+		m_ExternModuleManager = std::move(byteFile.m_ExternModuleManager);
 
 		m_ShitBFVersion = byteFile.m_ShitBFVersion;
 		m_ShitBCVersion = byteFile.m_ShitBCVersion;
@@ -130,16 +130,16 @@ namespace sgn {
 
 	ExternModuleIndex ByteFile::AddExternModule(const std::string& path) {
 		GetDependencies().push_back(path);
-		return m_Dependencies.CreateModule(path);
+		return m_ExternModuleManager.CreateModule(path);
 	}
 	ExternModuleIndex ByteFile::GetExternModule(const std::string& path) const noexcept {
-		return m_Dependencies.GetModule(path);
+		return m_ExternModuleManager.GetModule(path);
 	}
 	const VirtualModule* ByteFile::GetExternModuleInfo(ExternModuleIndex index) const noexcept {
-		return m_Dependencies.GetModuleInfo(index);
+		return m_ExternModuleManager.GetModuleInfo(index);
 	}
 	VirtualModule* ByteFile::GetExternModuleInfo(ExternModuleIndex index) noexcept {
-		return m_Dependencies.GetModuleInfo(index);
+		return m_ExternModuleManager.GetModuleInfo(index);
 	}
 
 	IntConstantIndex ByteFile::AddIntConstant(std::uint32_t value) {
@@ -198,14 +198,14 @@ namespace sgn {
 	}
 	const StructureInfo* ByteFile::GetStructureInfo(MappedTypeIndex index) const noexcept {
 		const auto& mapping = GetMappings().GetStructureMapping(static_cast<std::uint32_t>(index));
-		const auto moduleInfo = m_Dependencies.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
+		const auto moduleInfo = m_ExternModuleManager.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
 		return static_cast<const sgn::StructureInfo*>(&*std::find_if(moduleInfo->GetStructures().begin(), moduleInfo->GetStructures().end(), [&mapping](const auto& structure) {
 			return mapping.Name == structure.Name;
 		}));
 	}
 	StructureInfo* ByteFile::GetStructureInfo(MappedTypeIndex index) noexcept {
 		const auto& mapping = GetMappings().GetStructureMapping(static_cast<std::uint32_t>(index));
-		const auto moduleInfo = m_Dependencies.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
+		const auto moduleInfo = m_ExternModuleManager.GetModuleInfo(static_cast<ExternModuleIndex>(mapping.Module));
 		return static_cast<sgn::StructureInfo*>(&*std::find_if(moduleInfo->GetStructures().begin(), moduleInfo->GetStructures().end(), [&mapping](const auto& structure) {
 			return mapping.Name == structure.Name;
 		}));
@@ -250,16 +250,16 @@ namespace sgn {
 	}
 
 	MappedStructureIndex ByteFile::Map(ExternModuleIndex module, ExternStructureIndex structure) {
-		auto& structureInfo = m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)];
+		auto& structureInfo = m_ExternModuleManager.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)];
 		structureInfo.Type.Module = static_cast<std::uint32_t>(module) + 1;
 
 		GetMappings().AddStructureMapping(static_cast<std::uint32_t>(module),
-			m_Dependencies.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)].Name);
+			m_ExternModuleManager.GetModuleInfo(module)->GetStructures()[static_cast<std::uint32_t>(structure)].Name);
 		return static_cast<MappedStructureIndex>(GetMappings().GetStructureMappingCount() - 1);
 	}
 	MappedFunctionIndex ByteFile::Map(ExternModuleIndex module, ExternFunctionIndex function) {
 		GetMappings().AddFunctionMapping(static_cast<std::uint32_t>(module),
-			std::string(m_Dependencies.GetModuleInfo(module)->GetFunctions()[static_cast<std::uint32_t>(function)].GetName()));
+			std::string(m_ExternModuleManager.GetModuleInfo(module)->GetFunctions()[static_cast<std::uint32_t>(function)].GetName()));
 		return static_cast<MappedFunctionIndex>(GetMappings().GetFunctionMappingCount() - 1);
 	}
 	MappedStructureIndex ByteFile::GetMapping(MappedTypeIndex structure) {

@@ -40,7 +40,7 @@ namespace sgn {
 		friend class Generator;
 
 	private:
-		ExternModuleManager m_Dependencies;
+		ExternModuleManager m_ExternModuleManager;
 
 		ShitBFVersion m_ShitBFVersion = ShitBFVersion::Latest;
 		ShitBCVersion m_ShitBCVersion = ShitBCVersion::Latest;
