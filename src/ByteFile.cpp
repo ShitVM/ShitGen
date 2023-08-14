@@ -122,7 +122,7 @@ namespace sgn {
 		return static_cast<std::uint32_t>(GetStructures().size() + static_cast<std::uint32_t>(TypeCode::Structure) + static_cast<std::uint32_t>(index));
 	}
 	std::uint32_t ByteFile::TransformMappedIndex(MappedStructureIndex index) const noexcept {
-		return GetConstantPool().GetAllCount() + TransformMappedIndex(static_cast<MappedTypeIndex>(index));
+		return GetConstantPool().GetAllCount() + static_cast<std::uint32_t>(index);
 	}
 	std::uint32_t ByteFile::TransformMappedIndex(MappedFunctionIndex index) const noexcept {
 		return static_cast<std::uint32_t>(GetFunctions().size() + static_cast<std::uint32_t>(index));
