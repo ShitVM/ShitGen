@@ -101,7 +101,7 @@ namespace sgn {
 	GeneralArrayIndex ByteFile::MakeArray(GeneralTypeIndex type) const {
 		if (std::holds_alternative<TypeIndex>(type)) {
 			return MakeArray(std::get<TypeIndex>(type));
-		} else if (std::holds_alternative<MappedTypeIndex>(type)) {
+		} else {
 			return MakeArray(std::get<MappedTypeIndex>(type));
 		}
 	}
@@ -129,7 +129,7 @@ namespace sgn {
 	}
 
 	ExternModuleIndex ByteFile::AddExternModule(const std::string& path) {
-		GetDependencies().push_back(path);
+		GetDependencies().push_back({ path });
 		return m_ExternModuleManager.CreateModule(path);
 	}
 	ExternModuleIndex ByteFile::GetExternModule(const std::string& path) const noexcept {
@@ -213,14 +213,14 @@ namespace sgn {
 	const StructureInfo* ByteFile::GetStructureInfo(GeneralTypeIndex index) const noexcept {
 		if (std::holds_alternative<TypeIndex>(index)) {
 			return GetStructureInfo(std::get<TypeIndex>(index));
-		} else if (std::holds_alternative<MappedTypeIndex>(index)) {
+		} else {
 			return GetStructureInfo(std::get<MappedTypeIndex>(index));
 		}
 	}
 	StructureInfo* ByteFile::GetStructureInfo(GeneralTypeIndex index) noexcept {
 		if (std::holds_alternative<TypeIndex>(index)) {
 			return GetStructureInfo(std::get<TypeIndex>(index));
-		} else if (std::holds_alternative<MappedTypeIndex>(index)) {
+		} else {
 			return GetStructureInfo(std::get<MappedTypeIndex>(index));
 		}
 	}

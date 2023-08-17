@@ -21,8 +21,8 @@ namespace sgn {
 		Write(static_cast<std::uint32_t>(dependencies.size()));
 		for (std::uint32_t i = 0; i < dependencies.size(); ++i) {
 			const auto& depen = dependencies[i];
-			Write(static_cast<std::uint32_t>(depen.size()));
-			m_Stream.write(depen.c_str(), depen.size());
+			Write(static_cast<std::uint32_t>(depen.Path.size()));
+			m_Stream.write(depen.Path.c_str(), depen.Path.size());
 		}
 
 		Generate(m_ByteFile.GetMappings());
@@ -86,7 +86,7 @@ namespace sgn {
 				const auto typeIndex = m_ByteFile.GetTypeIndex(fields[j].Type);
 				if (std::holds_alternative<TypeIndex>(typeIndex)) {
 					typeCode = static_cast<std::uint32_t>(fields[j].Type->Code);
-				} else if (std::holds_alternative<MappedTypeIndex>(typeIndex)) {
+				} else {
 					typeCode = m_ByteFile.TransformMappedIndex(std::get<MappedTypeIndex>(typeIndex));
 				}
 

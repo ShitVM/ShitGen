@@ -31,6 +31,8 @@ namespace sgn::detail {
 		using svm::core::Loader<VirtualFunctionInfo>::Create;
 
 	private:
+		using svm::core::Loader<VirtualFunctionInfo>::AddLibraryDirectory;
+
 		using svm::core::Loader<VirtualFunctionInfo>::Load;
 		using svm::core::Loader<VirtualFunctionInfo>::Build;
 
