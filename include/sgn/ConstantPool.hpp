@@ -21,6 +21,7 @@ namespace sgn {
 	public:
 		std::uint32_t TransformRealIndex(IntConstantIndex index) const noexcept;
 		std::uint32_t TransformRealIndex(LongConstantIndex index) const noexcept;
+		std::uint32_t TransformRealIndex(SingleConstantIndex index) const noexcept;
 		std::uint32_t TransformRealIndex(DoubleConstantIndex index) const noexcept;
 	};
 }

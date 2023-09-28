@@ -12,6 +12,7 @@ namespace sgn {
 	SGN_INDEX(MappedArrayIndex, 4);
 	SGN_INDEX(IntConstantIndex, 5);
 	SGN_INDEX(LongConstantIndex, 6);
+	SGN_INDEX(SingleConstantIndex, 18);
 	SGN_INDEX(DoubleConstantIndex, 7);
 	SGN_INDEX(StructureIndex, 8);
 	SGN_INDEX(MappedStructureIndex, 9);

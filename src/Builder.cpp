@@ -94,6 +94,7 @@ void Builder:: opCode(generalIndexType index) {															\
 
 	InstructionWithOperandImpl(Push, IntConstantIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, LongConstantIndex, ShitBCVersion::v0_1_0);
+	InstructionWithOperandImpl(Push, SingleConstantIndex, ShitBCVersion::v0_5_0);
 	InstructionWithOperandImpl(Push, DoubleConstantIndex, ShitBCVersion::v0_1_0);
 	InstructionWithOperandImpl(Push, StructureIndex, ShitBCVersion::v0_2_0);
 	InstructionWithOperandImpl(Push, MappedStructureIndex, ShitBCVersion::v0_4_0);

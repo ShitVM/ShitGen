@@ -112,6 +112,9 @@ namespace sgn {
 	std::uint32_t ByteFile::TransformConstantIndex(LongConstantIndex index) const noexcept {
 		return static_cast<const ConstantPool&>(GetConstantPool()).TransformRealIndex(index);
 	}
+	std::uint32_t ByteFile::TransformConstantIndex(SingleConstantIndex index) const noexcept {
+		return static_cast<const ConstantPool&>(GetConstantPool()).TransformRealIndex(index);
+	}
 	std::uint32_t ByteFile::TransformConstantIndex(DoubleConstantIndex index) const noexcept {
 		return static_cast<const ConstantPool&>(GetConstantPool()).TransformRealIndex(index);
 	}
@@ -150,6 +153,10 @@ namespace sgn {
 		if (const auto index = GetConstantPool().FindLongConstant(value); index != ConstantPool::NPos) return static_cast<LongConstantIndex>(index);
 		else return static_cast<LongConstantIndex>(GetConstantPool().AddLongConstant(value));
 	}
+	SingleConstantIndex ByteFile::AddSingleConstant(float value) {
+		if (const auto index = GetConstantPool().FindSingleConstant(value); index != ConstantPool::NPos) return static_cast<SingleConstantIndex>(index);
+		else return static_cast<SingleConstantIndex>(GetConstantPool().AddSingleConstant(value));
+	}
 	DoubleConstantIndex ByteFile::AddDoubleConstant(double value) {
 		if (const auto index = GetConstantPool().FindDoubleConstant(value); index != ConstantPool::NPos) return static_cast<DoubleConstantIndex>(index);
 		else return static_cast<DoubleConstantIndex>(GetConstantPool().AddDoubleConstant(value));
@@ -159,6 +166,9 @@ namespace sgn {
 	}
 	LongConstantIndex ByteFile::AddLongConstantFast(std::uint64_t value) {
 		return static_cast<LongConstantIndex>(GetConstantPool().AddLongConstant(value));
+	}
+	SingleConstantIndex ByteFile::AddSingleConstantFast(float value) {
+		return static_cast<SingleConstantIndex>(GetConstantPool().AddSingleConstant(value));
 	}
 	DoubleConstantIndex ByteFile::AddDoubleConstantFast(double value) {
 		return static_cast<DoubleConstantIndex>(GetConstantPool().AddDoubleConstant(value));

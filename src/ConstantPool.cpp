@@ -15,6 +15,9 @@ namespace sgn {
 	std::uint32_t ConstantPool::TransformRealIndex(LongConstantIndex index) const noexcept {
 		return static_cast<std::uint32_t>(index) + GetLongOffset();
 	}
+	std::uint32_t ConstantPool::TransformRealIndex(SingleConstantIndex index) const noexcept {
+		return static_cast<std::uint32_t>(index) + GetSingleOffset();
+	}
 	std::uint32_t ConstantPool::TransformRealIndex(DoubleConstantIndex index) const noexcept {
 		return static_cast<std::uint32_t>(index) + GetDoubleOffset();
 	}

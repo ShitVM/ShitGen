@@ -93,6 +93,7 @@ namespace sgn {
 
 		std::uint32_t TransformConstantIndex(IntConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(LongConstantIndex index) const noexcept;
+		std::uint32_t TransformConstantIndex(SingleConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(DoubleConstantIndex index) const noexcept;
 		std::uint32_t TransformConstantIndex(StructureIndex index) const noexcept;
 		std::uint32_t TransformMappedIndex(MappedTypeIndex index) const noexcept;
@@ -106,9 +107,11 @@ namespace sgn {
 
 		IntConstantIndex AddIntConstant(std::uint32_t value);
 		LongConstantIndex AddLongConstant(std::uint64_t value);
+		SingleConstantIndex AddSingleConstant(float value);
 		DoubleConstantIndex AddDoubleConstant(double value);
 		IntConstantIndex AddIntConstantFast(std::uint32_t value);
 		LongConstantIndex AddLongConstantFast(std::uint64_t value);
+		SingleConstantIndex AddSingleConstantFast(float value);
 		DoubleConstantIndex AddDoubleConstantFast(double value);
 
 		StructureIndex AddStructure(std::string name);

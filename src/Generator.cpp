@@ -67,6 +67,14 @@ namespace sgn {
 			Write(longPool[i].Value);
 		}
 
+		if (m_ByteFile.GetShitBFVersion() >= ShitBFVersion::v0_5_0) {
+			const auto& singlePool = constantPool.GetSinglePool();
+			Write(static_cast<std::uint32_t>(singlePool.size()));
+			for (std::uint32_t i = 0; i < singlePool.size(); ++i) {
+				Write(singlePool[i].Value);
+			}
+		}
+
 		const auto& doublePool = constantPool.GetDoublePool();
 		Write(static_cast<std::uint32_t>(doublePool.size()));
 		for (std::uint32_t i = 0; i < doublePool.size(); ++i) {
@@ -133,6 +141,7 @@ namespace sgn {
 		case OperandIndex<MappedArrayIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedTypeIndex>(operand)) | (1 << 31);
 		case OperandIndex<IntConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<IntConstantIndex>(operand));
 		case OperandIndex<LongConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<LongConstantIndex>(operand));
+		case OperandIndex<SingleConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<SingleConstantIndex>(operand));
 		case OperandIndex<DoubleConstantIndex>: return m_ByteFile.TransformConstantIndex(static_cast<DoubleConstantIndex>(operand));
 		case OperandIndex<StructureIndex>: return m_ByteFile.TransformConstantIndex(static_cast<StructureIndex>(operand));
 		case OperandIndex<MappedStructureIndex>: return m_ByteFile.TransformMappedIndex(static_cast<MappedStructureIndex>(operand));
