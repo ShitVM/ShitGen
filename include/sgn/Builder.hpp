@@ -93,6 +93,7 @@ namespace sgn {
 
 		void ToI();
 		void ToL();
+		void ToSi();
 		void ToD();
 		void ToP();
 

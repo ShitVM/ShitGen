@@ -144,6 +144,7 @@ void Builder:: opCode(generalIndexType index) {															\
 
 	InstructionImpl(ToI, ShitBCVersion::v0_1_0);
 	InstructionImpl(ToL, ShitBCVersion::v0_1_0);
+	InstructionImpl(ToSi, ShitBCVersion::v0_5_0);
 	InstructionImpl(ToD, ShitBCVersion::v0_1_0);
 	InstructionImpl(ToP, ShitBCVersion::v0_2_0);
 
